@@ -264,6 +264,13 @@ const initializeDefaultFile = () => {
     terminal.classList.remove('terminal-minimized');
   }
 
+  const handleTouchStart = (event) => {
+  if (event.target.classList.contains('terminal-pane') || event.target.closest('.terminal-pane')) {
+    focusHiddenInput();
+  }
+};
+
+
   const updateSplit = () => {
     splitInstance.value = Split(['.terminal-pane', '.editor-container'], {
       sizes: window.innerWidth <= 768 ? [90, 10] : splitSizes.value,
@@ -287,7 +294,7 @@ const initializeDefaultFile = () => {
     nextTick(() => {
       updateSplit()
     })
-    window.addEventListener('touchstart', focusHiddenInput);
+    window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('keydown', handleKeyPress);
     window.addEventListener('resize', () => {
       setTimeout(() => {
