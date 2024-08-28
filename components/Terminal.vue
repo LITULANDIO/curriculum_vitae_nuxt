@@ -193,12 +193,13 @@
   }
 
   const handleTouchStart = (event) => {
-    nextTick(() => {
-    if (event.target.closest('.terminal-pane')) {
-      focusHiddenInput()
+  nextTick(() => {
+    const terminalPane = document.querySelector('.terminal-pane');
+    if (terminalPane && terminalPane.contains(event.target)) {
+      focusHiddenInput();
     }
-  });
-};
+  })
+  }
 
 const handleResize = () => {
   setTimeout(() => {
