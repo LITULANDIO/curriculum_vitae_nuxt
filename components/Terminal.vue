@@ -210,15 +210,15 @@ const handleResize = () => {
     focusHiddenInput();
     typeCommand();
     blinkCursor();
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener('touchstart', handleTouchStart)
+    window.addEventListener('keydown', handleKeyPress)
     window.addEventListener('resize', handleResize)
+  })
 
   onBeforeUnmount(() => {
     if (editorInstance.value) {
       editorInstance.value.dispose();
     }
-
   })
   </script>
   
