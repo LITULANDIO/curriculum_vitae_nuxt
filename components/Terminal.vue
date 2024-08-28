@@ -5,7 +5,7 @@
         class="relative w-full rounded-[10px] flex flex-col overflow-hidden font-mono text-left bg-transparent h-[350px] md:h-[420px]"
         :class="[isDarkTheme ? 'text-white' : 'text-black', isDarkTheme ? 'shadow-shadow-white' : 'shadow-shadow-dark']">
         <div
-          class="w-full h-[30px] rounded-t-[10px] flex items-center justify-between px-[10px] box-border z-10"
+          class="w-full h-[30px] rounded-t-[10px] flex items-center justify-between px-[10px] box-border z-10 terminal-body"
           :class="[isDarkTheme ? 'bg-white' : 'bg-black']">
           <div class="flex gap-2">
             <span class="w-[12px] h-[12px] rounded-full bg-[#ff5f57]"></span>
@@ -26,7 +26,7 @@
           :class="[isDarkTheme ? 'bg-black' : 'bg-white']"
           >
         </div>
-        <div class="relative z-20 flex-1 overflow-y-auto p-2.5 whitespace-pre-wrap pb-2.5 text-xs md:text-base max-h-[350px]"> <!-- Control de tamaño de fuente y altura máxima -->
+        <div ref="outputRef" class="relative z-20 flex-1 overflow-y-auto p-2.5 whitespace-pre-wrap pb-2.5 text-xs md:text-base max-h-[350px]"> <!-- Control de tamaño de fuente y altura máxima -->
           <div v-for="(line, index) in outputLines" :key="index">
             <span>{{ line }}</span>
           </div>
@@ -194,10 +194,11 @@
 
   const handleTouchStart = (event) => {
     nextTick(() => {
-      if (event.target.classList.contains('terminal-pane') || event.target.closest('.terminal-pane')) {
-        focusHiddenInput();
-      }
-    })
+    const terminalBody = document.querySelector('.terminal-body');
+    if (terminalBody && terminalBody.contains(event.target)) {
+      focusHiddenInput();
+    }
+  });
 };
 
   onMounted(() => {
@@ -230,33 +231,8 @@
     @apply w-full h-full overflow-auto;
   }
   
-  .terminal-container {
-    @apply fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center;
-  }
-  
-  .terminal-body {
-    @apply relative flex flex-col overflow-hidden font-mono text-left text-xs md:text-base;
-    height: 500px;
-    max-height: 80vh;
-    max-width: 100%;
-  }
-  
-  .terminal-content {
-    @apply flex-1 overflow-y-auto p-2.5;
-  }
-  
-  .terminal-footer {
-    @apply flex items-center p-2.5;
-  }
-  
   .terminal-minimized {
     @apply w-full h-20;
-  }
-  
-  @media (min-width: 764px) {
-    .text-xs {
-      @apply text-base; /* Tamaño del texto en escritorio */
-    }
   }
 
   .gutter {
