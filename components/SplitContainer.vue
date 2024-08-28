@@ -26,7 +26,7 @@
   const selectedFileId = ref(null);
   const tree = ref(fileTree)
   const code = ref('')
-  const isMobile = computed(() => window.innerWidth <= 764)
+  const isMobile = computed(() => process.client && window.innerWidth <= 764)
   
   const updateSplit = () => {
     const terminalPane = document.querySelector('.terminal-pane');
