@@ -6,12 +6,19 @@ export default defineNuxtConfig({
   modules: ['nuxt-particles', 'nuxt-monaco-editor'],
   particles: { mode: 'full' },
   monacoEditor: {
-    // These are default values:
     locale: 'en',
     componentName: {
       codeEditor: 'MonacoEditor',
       diffEditor: 'MonacoDiffEditor'
     }
-  }
- 
+  },
+  css: ['~/assets/tailwind.css'],
+  postcss: {
+    plugins: {
+      'postcss-import': {},
+      'tailwindcss/nesting': {},
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
 })

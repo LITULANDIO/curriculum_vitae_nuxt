@@ -1,14 +1,18 @@
 <template>
-  <div id="tsparticles"></div>
+  <div id="tsparticles" class="fixed inset-0 w-screen h-screen z-[-10]"
+  :class="[isDarkTheme ? 'bg-black' : 'bg-white']"
+  ></div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { onMounted } from 'vue';
 import { tsParticles } from 'tsparticles-engine';
 import { loadImageShape } from 'tsparticles-shape-image';
 import { loadSlim } from 'tsparticles-slim';
 import { detectDevice } from '../utils/common'
+import { useTheme } from '~/composables/useTheme';
 
+const { isDarkTheme } = useTheme()
 const particlesOptions = {
   fullScreen: {
     enable: true,
@@ -39,7 +43,7 @@ const particlesOptions = {
       enable: true,
       speed: 2,
       collisions: {
-        enable: true, // Habilitar colisiones
+        enable: true,
       },
     },
     opacity: {
@@ -62,15 +66,3 @@ onMounted(() => {
   particlesInit().catch(console.error);
 });
 </script>
-
-<style>
-#tsparticles {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #000;
-  z-index: -10;
-}
-</style>

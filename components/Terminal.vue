@@ -1,70 +1,62 @@
 <template>
-  <div class="split-container" v-if="currentFile">
-    <div ref="terminalPane" class="pane terminal-pane">
-      <div class="terminal-container">
-        <div class="terminal">
-          <div class="terminal-header">
-            <div class="header-buttons">
-              <span class="button close"></span>
-              <span @click="minimizeTerminal" class="button minimize"></span>
-              <span @click="maximizeTerminal" class="button maximize"></span>
-            </div>
-            <div class="header-title">Terminal de Comandos</div>
+  <div ref="terminalPane" class="inset-0 flex items-center justify-center overflow-auto terminal-pane">
+    <div class="mx-auto relative z-10 w-full max-w-[600px] h-auto"> <!-- Ancho fijo con un máximo de 600px -->
+      <div
+        class="relative w-full rounded-[10px] flex flex-col overflow-hidden font-mono text-left bg-transparent h-[350px] md:h-[420px]"
+        :class="[isDarkTheme ? 'text-white' : 'text-black', isDarkTheme ? 'shadow-shadow-white' : 'shadow-shadow-dark']">
+        <div
+          class="w-full h-[30px] rounded-t-[10px] flex items-center justify-between px-[10px] box-border z-10"
+          :class="[isDarkTheme ? 'bg-white' : 'bg-black']">
+          <div class="flex gap-2">
+            <span class="w-[12px] h-[12px] rounded-full bg-[#ff5f57]"></span>
+            <span
+              @click="minimizeTerminal"
+              class="w-[12px] h-[12px] rounded-full bg-[#ffbd2e] cursor-pointer">
+            </span>
+            <span
+              @click="maximizeTerminal"
+              class="w-[12px] h-[12px] rounded-full bg-[#28c940] cursor-pointer">
+            </span>
           </div>
-          <div class="terminal-background"></div>
-          <div class="output" ref="outputRef">
-            <div :id="line.replace(' -  ', '')" v-for="(line, index) in outputLines" :key="index">{{ line }}</div>
+          <div class="flex-1 text-center font-bold"
+          :class="[isDarkTheme ? 'text-black' : 'text-white']">Terminal de Comandos</div>
+        </div>
+        <div
+          class="absolute top-[25px] left-0 right-0 bottom-0 rounded-b-[10px] z-0"
+          :class="[isDarkTheme ? 'bg-black' : 'bg-white']"
+          >
+        </div>
+        <div class="relative z-20 flex-1 overflow-y-auto p-2.5 whitespace-pre-wrap pb-2.5 text-xs md:text-base max-h-[350px]"> <!-- Control de tamaño de fuente y altura máxima -->
+          <div v-for="(line, index) in outputLines" :key="index">
+            <span>{{ line }}</span>
           </div>
-          <div class="input-area">
-            <span class="prompt">$ </span>
-            <input
-              ref="hiddenInput"
-              v-model="currentInput"
-              class="hidden-input"
-              @blur="focusHiddenInput"
-              @keyup.enter="processUserCommand"
-            />
-            <span class="input-text">{{ currentInput }}</span>
-            <span class="cursor" :class="{ active: cursorActive }">|</span>
-          </div>
+        </div>
+        <div class="relative z-20 flex items-center p-2.5 text-xs md:text-base">
+          <span class="text-[#00ff00] mr-1.5">$ </span>
+          <input
+            ref="hiddenInput"
+            v-model="currentInput"
+            class="absolute top-0 left-0 w-[1px] h-[1px] opacity-0 pointer-events-none"
+            @blur="focusHiddenInput"
+            @keyup.enter="processUserCommand"
+          />
+          <span class="flex-1 outline-none overflow-hidden text-[#00ff00] whitespace-nowrap">
+            {{ currentInput }}
+          </span>
+          <span
+            class="inline-block w-[10px] bg-[#00ff00] text-[#00ff00] ml-1.5"
+            :class="[cursorActive ? 'opacity-100' : 'opacity-0']"
+            >|</span
+          >
         </div>
       </div>
     </div>
-    <FileNode 
-      v-if="currentFile"
-      :nodes="fileTree" 
-      :selectedFileId="selectedFileId"
-      @selectNode="loadFileContent"/>
-    <MonacoEditor 
-      v-if="currentFile === 'Terminal.vue'" 
-      class="editor-container" 
-      v-model="code1" 
-      :lang="currentFileLang" 
-      :options="{ theme: 'vs-dark' }"
-    />
-    <MonacoEditor 
-      v-if="currentFile === 'Particles.vue'" 
-      class="editor-container" 
-      v-model="code2" 
-      :lang="currentFileLang" 
-      :options="{ theme: 'vs-dark' }"
-    />
-    <MonacoEditor 
-      v-if="currentFile === 'file1.js'" 
-      class="editor-container" 
-      v-model="code3" 
-      :lang="currentFileLang" 
-      :options="{ theme: 'vs-dark' }"
-    />    
   </div>
 </template>
-
   
   <script setup>
-  import { ref, onMounted, nextTick, onBeforeUnmount, watch } from 'vue';
-  import Split from 'split.js';
-  import { code } from '../utils/common'
-  
+  import { ref, onMounted, nextTick, onBeforeUnmount } from 'vue';
+  import { useTheme } from '~/composables/useTheme';
   const outputLines = ref([]);
   const currentInput = ref('');
   const cursorActive = ref(true);
@@ -74,73 +66,7 @@
   const charIndex = ref(0);
   const isUserInputEnabled = ref(false);
   const editorInstance = ref(null);
-  const currentFile = ref(null);
-  const selectedFileId = ref(null);
-  const currentFileLang = ref('php');
-  const code1 = ref('')
-  const code2 = ref('')
-  const code3 = ref('')
-  const splitInstance = ref(null);
-  const splitSizes = ref([90, 10]);
-  const fileTree = ref([
-  {
-    id: 1,
-    label: 'src',
-    open: true,
-    children: [
-      { id: 2, label: 'file1.js', type: 'file' },
-      {
-        id: 3,
-        label: 'components',
-        open: true,
-        children: [
-          { id: 4, label: 'Terminal.vue', type: 'file' },
-          { id: 5, label: 'Particles.vue', type: 'file' },
-        ]
-      }
-    ]
-  }
-])
-const loadFileContent = (file) => {
-  console.log(file)
-  selectedFileId.value = file.id
-  if (file.label === 'Terminal.vue') {
-    code1.value = code
-    currentFile.value = file.label
-  } else if (file.label === 'Particles.vue') {
-    code2.value = '// Código para file2.js'
-    currentFile.value = file.label
-  } else if (file.label === 'file1.js') {
-    code3.value = "console.log('holix matrix')"
-    currentFile.value = file.label
-  }
-  nextTick(() => {
-    if (splitInstance.value) {
-        splitInstance.value.destroy();
-          splitInstance.value = Split(['.terminal-pane', '.editor-container'], {
-          sizes: [50,50],
-          minSize: [100, 100],
-          direction: window.innerWidth <= 768 ? 'vertical' : 'horizontal',
-          cursor: window.innerWidth <= 768 ? 'col-resize' : 'row-resize',
-          gutterAlign: 'center',
-          gutterSize: 10,
-          gutterStyle: (dimension, gutterSize) => ({
-            cursor: dimension === 'horizontal' ? 'row-resize' : 'col-resize', 
-            backgroundColor: 'rgba(150, 150, 150, 0.7)',
-        })
-      })
-    }
-  })
-}
-
-const initializeDefaultFile = () => {
-  if (selectedFileId.value === null) {
-    const defaultFile = fileTree.value[0].children.find(child => child.type === 'file');
-    if (defaultFile) {
-      loadFileContent(defaultFile);
-    }
-  }
-};
+  const { isDarkTheme } = useTheme();
 
   const commands = [
     'echo "Hola!👋 me llamo Carles"',
@@ -148,6 +74,8 @@ const initializeDefaultFile = () => {
     'echo "Soy un apasionado del diseño y desarrollo web 👨🏻‍💻"',
     'echo "Mi especialidad es el Front end"',
   ];
+
+// const dark = computed(() => isDarkTheme.value)
   
   
   const typeCommand = () => {
@@ -265,45 +193,23 @@ const initializeDefaultFile = () => {
   }
 
   const handleTouchStart = (event) => {
-  if (event.target.classList.contains('terminal-pane') || event.target.closest('.terminal-pane')) {
-    focusHiddenInput();
-  }
-};
-
-
-  const updateSplit = () => {
-    splitInstance.value = Split(['.terminal-pane', '.editor-container'], {
-      sizes: window.innerWidth <= 768 ? [90, 10] : splitSizes.value,
-      minSize: [100, 100],
-      direction: window.innerWidth <= 768 ? 'vertical' : 'horizontal',
-      cursor: window.innerWidth <= 768 ? 'col-resize' : 'row-resize',
-      gutterAlign: 'center',
-      gutterSize: 10,
-      gutterStyle: (dimension, gutterSize) => ({
-        cursor: dimension === 'horizontal' ? 'row-resize' : 'col-resize',
-        backgroundColor: 'rgba(150, 150, 150, 0.7)',
-      }),
-    });
+    nextTick(() => {
+      if (event.target.classList.contains('terminal-pane') || event.target.closest('.terminal-pane')) {
+        focusHiddenInput();
+      }
+    })
 };
 
   onMounted(() => {
     focusHiddenInput();
     typeCommand();
     blinkCursor();
-    initializeDefaultFile()
-    nextTick(() => {
-      updateSplit()
-    })
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('keydown', handleKeyPress);
     window.addEventListener('resize', () => {
-      setTimeout(() => {
-        scrollToBottom();
-        if (splitInstance.value) {
-          splitInstance.value.destroy();
-          updateSplit()
-        }
-      }, 300);    
+    setTimeout(() => {
+      scrollToBottom()
+    }, 300);    
     })
   })
 
@@ -315,322 +221,55 @@ const initializeDefaultFile = () => {
   })
   </script>
   
-  <style lang="scss">
-  
-  .monaco-editor {
-    height: 100vh;
-  }
-  .cm-editor {
-    height: 100vh;
-  }
-  .split-container {
-    height: 100vh;
-    display: flex;
-  }
-  
-  .editor-container {
-    height: 100%;
-    width: 100%;
-    position: relative;
-    z-index: 100;
-    background: #2d2d2d;
-    color: white;
-    position: relative;
+  <style lang="postcss">
+   .terminal-minimized {
+    @apply fixed bottom-0 right-0 w-1/3 h-20 transition-all duration-300 z-20;
   }
 
-  .split {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-  
-.gutter {
-  background-color: rgba(150, 150, 150, 0.7);
-  background-repeat: no-repeat;
-  background-position: center;
-  position: relative;
-  z-index: 999;
-}
-
-.gutter.gutter-horizontal {
-  cursor: row-resize;
-  height: 100vh !important;
-  width: 20px !important;
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
-}
-
-.gutter.gutter-vertical {
-  cursor: col-resize;
-  height: 20px !important;
-  width: 100% !important;
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
-}
-
-  .pane {
-    overflow: auto;
-    display: flex;
-    justify-content: center;
-  }
-  .code-pane {
-    flex: 1;
-    background: #1e1e1e;
-  }
-  .code-editor {
-    width: 100%;
-    height: 100%;
-    background: #2d2d2d;
-    color: white;
-    font-family: monospace;
+  .terminal-pane {
+    @apply w-full h-full overflow-auto;
   }
   
   .terminal-container {
-    width: 25%;
-    margin: auto;    
-    position: relative;
-    z-index: 100;
+    @apply fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center;
   }
   
-  .terminal {
-    position: relative;
-    width: 600px;
-    height: 425px;
-    border-radius: 10px;
-    color: #fff;
-    padding: 0 0px;
-    box-shadow:   
-    0 0 10px rgba(255, 255, 255, 0.5),
-      0 0 20px rgba(255, 255, 255, 0.4),
-      0 0 30px rgba(255, 255, 255, 0.3);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    font-family: "Courier New", Courier, monospace;
-    background-color: transparent;
-    text-align: left;
+  .terminal-body {
+    @apply relative flex flex-col overflow-hidden font-mono text-left text-xs md:text-base;
+    height: 500px;
+    max-height: 80vh;
+    max-width: 100%;
   }
   
-  .terminal-header {
-    width: 100%;
-    height: 30px;
-    background-color: #fff;
-    border-radius: 10px 10px 0 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 10px;
-    box-sizing: border-box;
-    z-index: 1;
+  .terminal-content {
+    @apply flex-1 overflow-y-auto p-2.5;
   }
   
-  .header-buttons {
-    display: flex;
-    gap: 8px;
+  .terminal-footer {
+    @apply flex items-center p-2.5;
   }
   
-  .button {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-  
-  .close {
-    background-color: #ff5f57;
-  }
-  
-  .minimize {
-    background-color: #ffbd2e;
-    display: block;
-    cursor: pointer;
-  }
-  
-  .maximize {
-    background-color: #28c940;
-    display: block;
-    cursor: pointer;
-  }
-  
-  .header-title {
-    flex: 1;
-    text-align: center;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .terminal-background {
-    position: absolute;
-    top: 25px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    border-radius: 0 0 10px 10px;
-    z-index: 0;
-  }
-  
-  .output,
-  .input-area {
-    position: relative;
-    z-index: 102;
-  }
-  
-  .output {
-    flex: 1;
-    overflow-y: auto;
-    white-space: pre-wrap;
-    padding-bottom: 10px;
-    padding: 10px;
-  }
-  
-  .input-area {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-  }
-  
-  .prompt {
-    color: #00ff00;
-    margin-right: 5px;
-  }
-  
-  .input-text {
-    flex: 1;
-    outline: none;
-    white-space: nowrap;
-    overflow: hidden;
-    color: #00ff00;
-  }
-  
-  .cursor {
-    display: inline-block;
-    width: 10px;
-    background-color: #00ff00;
-    margin-left: 2px;
-  }
-  
-  .cursor.active {
-    opacity: 1;
-  }
-  
-  .cursor:not(.active) {
-    opacity: 0;
-  }
-  .hidden-input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .click-capture-layer {
-    position: absolute;
-    top: 259px;
-    left: 0;
-    width: 370px;
-    height: 328px;
-    z-index: 101;
-    background-color: transparent;
-  }
   .terminal-minimized {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 35%;
-    height: 75px;
-    transition: all 0.3s ease;
-    z-index: 100;
+    @apply w-full h-20;
   }
   
-  @media (max-width: 768px) {
-    .terminal {
-      height: auto;
-      width: 100%;
-      max-width: 600px;
-      height: 425px;
-    }
-  
-    .terminal-header {
-      height: 25px;
-      font-size: 0.9rem;
-    }
-  
-    .terminal-background {
-      top: 20px;
-    }
-  
-    .button {
-      width: 10px;
-      height: 10px;
-    }
-  
-    .header-title {
-      font-size: 0.8rem;
-    }
-  
-    .output, .input-area {
-      padding: 5px;
-      font-size: 0.9rem;
-    }
-  
-    .input-text {
-      font-size: 0.9rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .split-container {
-    flex-direction: column; 
-  }
-    .pane {
-      padding: 10px;
-      margin-top: 3rem;
-    }
-
-    .terminal {
-      height: auto;
-      width: 370px;
-      max-width: 400px;
-      height: 325px;
-    }
-  
-    .terminal-header {
-      height: 20px;
-      font-size: 0.8rem;
-    }
-    .terminal-background {
-      top: 20px;
-    }
-    .terminal-container {
-      width: 100%;
-    }
-    .button {
-      width: 8px;
-      height: 8px;
-    }
-  
-    .header-title {
-      font-size: 0.7rem;
-    }
-  
-    .output, .input-area {
-      padding: 8px;
-      font-size: 0.8rem;
-    }
-  
-    .input-text {
-      font-size: 0.8rem;
+  @media (min-width: 764px) {
+    .text-xs {
+      @apply text-base; /* Tamaño del texto en escritorio */
     }
   }
 
-  ul {
-  list-style-type: none;
-  padding-left: 20px;
-}
-
-li {
-  cursor: pointer;
-}
+  .gutter {
+    @apply bg-[rgba(150,150,150,0.7)] bg-no-repeat bg-center relative z-[999];
+  }
+  
+  .gutter-horizontal {
+    @apply cursor-col-resize h-screen w-[20px];
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+  }
+  
+  .gutter-vertical {
+    @apply cursor-row-resize h-[20px] w-full;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+  }
   </style>
-  
