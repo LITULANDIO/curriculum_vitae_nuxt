@@ -194,12 +194,17 @@
 
   const handleTouchStart = (event) => {
     nextTick(() => {
-    const terminalBody = document.querySelector('.terminal-body');
-    if (terminalBody && terminalBody.contains(event.target)) {
-      focusHiddenInput();
+    if (event.target.closest('.terminal-pane')) {
+      focusHiddenInput()
     }
   });
 };
+
+const handleResize = () => {
+  setTimeout(() => {
+    scrollToBottom()
+  }, 300)
+}
 
   onMounted(() => {
     focusHiddenInput();
@@ -207,12 +212,7 @@
     blinkCursor();
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('keydown', handleKeyPress);
-    window.addEventListener('resize', () => {
-    setTimeout(() => {
-      scrollToBottom()
-    }, 300);    
-    })
-  })
+    window.addEventListener('resize', handleResize)
 
   onBeforeUnmount(() => {
     if (editorInstance.value) {
