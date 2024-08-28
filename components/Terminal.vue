@@ -37,8 +37,9 @@
             ref="hiddenInput"
             v-model="currentInput"
             class="absolute top-0 left-0 w-[1px] h-[1px] opacity-0 pointer-events-none"
-            @blur="focusHiddenInput"
+            @click="focusHiddenInput"
             @keyup.enter="processUserCommand"
+            @touch="focusHiddenInput"
           />
           <span class="flex-1 outline-none overflow-hidden text-[#00ff00] whitespace-nowrap">
             {{ currentInput }}
