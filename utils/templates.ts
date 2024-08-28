@@ -1,7 +1,7 @@
 export const terminal = `
 <template>
   <div ref="terminalPane" class="inset-0 flex items-center justify-center overflow-auto terminal-pane">
-    <div class="mx-auto relative z-10 w-full max-w-[600px] h-auto"> <!-- Ancho fijo con un máximo de 600px -->
+    <div class="mx-auto relative z-10 w-full max-w-[600px] h-auto">
       <div
         class="relative w-full rounded-[10px] flex flex-col overflow-hidden font-mono text-left bg-transparent h-[350px] md:h-[420px]"
         :class="[isDarkTheme ? 'text-white' : 'text-black', isDarkTheme ? 'shadow-shadow-white' : 'shadow-shadow-dark']">
@@ -75,10 +75,7 @@ export const terminal = `
     'echo "Bienvenido a mi curriculum interactivo"',
     'echo "Soy un apasionado del diseño y desarrollo web 👨🏻‍💻"',
     'echo "Mi especialidad es el Front end"',
-  ];
-
-// const dark = computed(() => isDarkTheme.value)
-  
+  ];  
   
   const typeCommand = () => {
     if (commandIndex.value < commands.length) {
