@@ -2,7 +2,7 @@
   <div 
     class="detail-container absolute font-mono text-xs md:text-base"  
     :class="[isDarkTheme ? 'bg-black text-white border-[#ddd]' : 'bg-white text-black border-[#ddd]']"
-    style="top: 100px">
+    >
     <h2 class="font-bold mb-1">{{ experience.text }}</h2>
     <p>{{ translateDescription}}</p>
     <button 
@@ -38,8 +38,10 @@ const translateDescription = computed(() => t(props.experience.description))
   padding: 15px;
   border-radius: 15px;
   border: 1px solid;
+  top: 100px;
   @media (max-width: 795px) {
       width: 100%;
+      top: 20rem;
     }
 }
 
