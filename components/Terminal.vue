@@ -157,6 +157,7 @@
       case 'experiencia':
         sendEmiterShowTimeLine()
         outputLines.value.push('terminal.commands10');
+        hiddenInput.value.blur()
         break;
       case 'proyectos':
         window.open('https://github.com/LITULANDIO', '_blank');
@@ -193,6 +194,7 @@
       case 'experience':
         sendEmiterShowTimeLine()
         outputLines.value.push('terminal.commands10');
+        hiddenInput.value.blur()
         break;
       case 'projects':
         window.open('https://github.com/LITULANDIO', '_blank');
