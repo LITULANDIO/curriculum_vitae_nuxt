@@ -277,7 +277,7 @@
     const terminalPane = document.querySelector('.terminal-pane');
     if (terminalPane && terminalPane.contains(event.target)) {
       focusHiddenInput();
-      window.scrollTo(0, 200);
+      window.scrollTo(0, 50);
     }
   })
   }
