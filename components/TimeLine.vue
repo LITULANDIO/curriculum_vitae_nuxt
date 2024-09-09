@@ -95,7 +95,7 @@
     z-index: 2;
     @media (max-width: 795px) {
       width: 100%;
-      top: 50px;
+      top: 26rem;
       left: 0%;
       padding: 10px;
     }
