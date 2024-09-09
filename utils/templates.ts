@@ -1,7 +1,7 @@
 export const terminal = `
 <template>
   <div ref="terminalPane" class="inset-0 flex items-center justify-center overflow-auto terminal-pane">
-    <div class="mx-auto relative z-10 w-full max-w-[600px] h-auto">
+    <div class="mx-auto w-full max-w-[600px]  px-[10px] h-auto absolute -z-10" style="top: 23rem;">
       <div
         class="relative w-full rounded-[10px] flex flex-col overflow-hidden font-mono text-left bg-transparent h-[350px] md:h-[420px]"
         :class="[isDarkTheme ? 'text-white' : 'text-black', isDarkTheme ? 'shadow-shadow-white' : 'shadow-shadow-dark']">
@@ -20,7 +20,7 @@ export const terminal = `
             </span>
           </div>
           <div class="flex-1 text-center font-bold"
-          :class="[isDarkTheme ? 'text-black' : 'text-white']">Terminal de Comandos</div>
+          :class="[isDarkTheme ? 'text-black' : 'text-white']">{{ $t('terminal.header') }}</div>
         </div>
         <div
           class="absolute top-[25px] left-0 right-0 bottom-0 rounded-b-[10px] z-0"
@@ -28,7 +28,7 @@ export const terminal = `
           >
         </div>
         <div ref="outputRef" class="relative z-20 flex-1 overflow-y-auto p-2.5 whitespace-pre-wrap pb-2.5 text-xs md:text-base max-h-[350px]"> <!-- Control de tamaño de fuente y altura máxima -->
-          <div v-for="(line, index) in outputLines" :key="index">
+          <div v-for="(line, index) in translatedOutputLines" :key="index">
             <span>{{ line }}</span>
           </div>
         </div>
@@ -57,8 +57,10 @@ export const terminal = `
 </template>
   
   <script setup>
-  import { ref, onMounted, nextTick, onBeforeUnmount } from 'vue';
+  import { ref, onMounted, nextTick, onBeforeUnmount, defineEmits } from 'vue';
   import { useTheme } from '~/composables/useTheme';
+  import { useI18n } from 'vue-i18n'
+
   const outputLines = ref([]);
   const currentInput = ref('');
   const cursorActive = ref(true);
@@ -69,24 +71,27 @@ export const terminal = `
   const isUserInputEnabled = ref(false);
   const editorInstance = ref(null);
   const { isDarkTheme } = useTheme();
+  const { t, locale } = useI18n()
 
-  const commands = [
-    'echo "Hola!👋 me llamo Carles"',
-    'echo "Bienvenido a mi curriculum interactivo"',
-    'echo "Soy un apasionado del diseño y desarrollo web 👨🏻‍💻"',
-    'echo "Mi especialidad es el Front end"',
-  ];  
-  
+  const emit = defineEmits(['showTimeLine'])
+
+  const commands = computed(() => [
+  t('terminal.commands1'),
+  t('terminal.commands2'),
+  t('terminal.commands3'),
+  t('terminal.commands4')
+]);
+
+
   const typeCommand = () => {
-    if (commandIndex.value < commands.length) {
-      if (charIndex.value < commands[commandIndex.value].length) {
-        currentInput.value += commands[commandIndex.value].charAt(charIndex.value);
+    if (commandIndex.value < commands.value.length) {
+      if (charIndex.value < commands.value[commandIndex.value].length) {
+        currentInput.value += commands.value[commandIndex.value].charAt(charIndex.value);
         charIndex.value++;
         setTimeout(typeCommand, 100);
       } else {
-        const fullCommand = commands[commandIndex.value];
-        const finalText = fullCommand.slice(5).replace(/^"|"$/g, '');
-        outputLines.value.push(finalText);
+        const fullCommand = commands.value[commandIndex.value];
+        outputLines.value.push(fullCommand);
         
         setTimeout(() => {
           currentInput.value = '';
@@ -99,58 +104,133 @@ export const terminal = `
         charIndex.value = 0;
       }
     } else {
-      outputLines.value.push(' ');
-      outputLines.value.push('Terminal lista para recibir comandos. 🚀');
-      outputLines.value.push('Escribe "help" para ver los comandos disponibles.');
+      outputLines.value.push(' ')
+      outputLines.value.push('terminal.commands5');
+      outputLines.value.push('terminal.commands6');
       isUserInputEnabled.value = true;
     }
     scrollToBottom();
   };
+
+  const translatedOutputLines = computed(() => {
+    return outputLines.value.map(line => {
+      if (line == '¡Hola!👋 me llamo Carles' || line == 'Hello!👋 My name is Carles') {
+        return t('terminal.commands1')
+      } else if (line == 'Bienvenido a mi currículum interactivo' || line == 'Welcome to my interactive resume') {
+        return t('terminal.commands2') 
+      } else if (line == 'Soy un apasionado del diseño y desarrollo web 👨🏻‍💻' || line  == 'I am passionate about web design and development 👨🏻‍💻') {
+        return t('terminal.commands3')
+      } else if (line == 'Mi especialidad es el Front end' || line == 'My specialty is Frontend') {
+        return t('terminal.commands4')
+      } else if (line == 'Comando no reconocido' || line == 'Command not recognised') {
+        return t('terminal.commands7')
+      } else {
+        return t(line)
+      }
+    })
+  })
+
+  const sendEmiterShowTimeLine = () => {
+    emit('showTimeLine', true)
+  }
+  const sendEmiterHiddenTimeLine = () => {
+    emit('showTimeLine', false)
+  }
+
+  const downloadPDF = () => {
+    const link = document.createElement('a');
+    link.href = '/api/pdf';
+    link.download = 'curriculum_carles.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   
-  const processUserCommand = (input) => {
+  const processUserCommandES = (input) => {
+    if (typeof input !== 'string') {
+      return;
+    }
+    switch (input.toLowerCase()) {
+      case 'ayuda': 
+        outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
+        sendEmiterHiddenTimeLine()
+        break;
+      case 'experiencia':
+        sendEmiterShowTimeLine()
+        outputLines.value.push('terminal.commands10');
+        break;
+      case 'proyectos':
+        window.open('https://github.com/LITULANDIO', '_blank');
+        outputLines.value.push('terminal.commands8');
+        sendEmiterHiddenTimeLine()
+        break;
+      case 'contacto':
+        // TODO
+        break;
+      case 'descargar_cv':
+        downloadPDF()
+        outputLines.value.push('terminal.commands9');
+        sendEmiterHiddenTimeLine()
+        break;
+      case 'limpiar':
+        sendEmiterHiddenTimeLine()
+        outputLines.value = [];
+        break;
+      default:
+        outputLines.value.push($t'terminal.commands7', input);
+    }
+    scrollToBottom();
+  };
+
+  const processUserCommandEN = (input) => {
     if (typeof input !== 'string') {
       return;
     }
     switch (input.toLowerCase()) {
       case 'help':
-        outputLines.value.push(' - 🚨 help');
-        outputLines.value.push(' - 💼 experience');
-        outputLines.value.push(' - 💻 projects');
-        outputLines.value.push(' - 📄 download_cv');
-        outputLines.value.push(' - 📩 contact');
-        outputLines.value.push(' - ❌ clear');
+        outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
+        sendEmiterHiddenTimeLine()
         break;
       case 'experience':
-        outputLines.value.push('TODO: link per veure la meva trajectoria professional');
-        minimizeTerminal()
+        sendEmiterShowTimeLine()
+        outputLines.value.push('terminal.commands10');
         break;
       case 'projects':
-        outputLines.value.push('TODO: link per veure els meus projectes');
+        window.open('https://github.com/LITULANDIO', '_blank');
+        outputLines.value.push('terminal.commands8');
+        sendEmiterHiddenTimeLine()
         break;
       case 'contact':
-        outputLines.value.push('TODO: link per veure un formulari de contacte');
+        outputLines.value.push('TODO: link per veure un formuli de contacte');
+        sendEmiterHiddenTimeLine()
         break;
       case 'download_cv':
-        outputLines.value.push('TODO: descarga del meu cv');
+        downloadPDF()
+        outputLines.value.push('terminal.commands9');
+        sendEmiterHiddenTimeLine()
         break;
       case 'clear':
+        sendEmiterHiddenTimeLine()
         outputLines.value = [];
         break;
       default:
-        outputLines.value.push('Comando no reconocido: input}');
+        outputLines.value.push($t('terminal.commands7', input);
     }
     scrollToBottom();
   };
   
   const handleKeyPress = (event) => {
     if (!isUserInputEnabled.value) return;
-  
     event.preventDefault();
-  
+
     if (event.key === 'Enter') {
       if (currentInput.value.trim() !== '') {
         outputLines.value.push(currentInput.value);
-        processUserCommand(currentInput.value);
+        if (locale.value === 'en') {
+          processUserCommandEN(currentInput.value)
+        } else {
+          processUserCommandES(currentInput.value);
+        }
         currentInput.value = '';
       }
     } else if (event.key === 'Backspace') {
@@ -207,6 +287,7 @@ const handleResize = () => {
 }
 
   onMounted(() => {
+    console.log(locale.value)
     focusHiddenInput();
     typeCommand();
     blinkCursor();
@@ -259,14 +340,15 @@ export const particles = `
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
 import { tsParticles } from 'tsparticles-engine';
 import { loadImageShape } from 'tsparticles-shape-image';
 import { loadSlim } from 'tsparticles-slim';
-import { detectDevice } from '../utils/common'
 import { useTheme } from '~/composables/useTheme';
 
 const { isDarkTheme } = useTheme()
+const isMobile = computed(() => process.client && window.innerWidth <= 764)
+
 const particlesOptions = {
   fullScreen: {
     enable: true,
@@ -274,7 +356,7 @@ const particlesOptions = {
   },
   particles: {
     number: {
-      value: detectDevice() === 'desktop' ? 50 : 10
+      value: isMobile ? 10 : 50
     },
     shape: {
       type: 'image',
@@ -320,8 +402,6 @@ onMounted(() => {
   particlesInit().catch(console.error);
 });
 </script>
-
-
 `
 
 export const fileNode = `
@@ -450,15 +530,32 @@ export const codeEditor = `
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
   }
   </style>
-  
-  
-  
 `
 
 export const splitContainer = `
 <template>
     <div class="h-screen flex px-2">
-      <Terminal class="terminal-pane" />
+      <div class="flex flex-col terminal-pane">
+        <transition  
+          @before-enter="onBeforeEnter"
+          @enter="onEnter"
+          @leave="onLeave">
+          <TimeLine 
+            v-show="isTimeLine && !selectedExperience"
+            :experience="events"
+            @selectExperience="onSelectExeperience"
+            />
+        </transition>
+        <transition name="detail">
+          <CardDetail 
+            v-if="selectedExperience"
+            class="absolute w-full"
+            :experience="selectedExperience"
+            @goBack="showTimeline"
+          />
+        </transition>
+        <Terminal @showTimeLine="onShowTimeLine"/>
+      </div>
       <FileNode 
           v-if="!isMobile"
           :nodes="tree" 
@@ -469,22 +566,27 @@ export const splitContainer = `
         class="editor-container" 
         :currentCode="code"
         :currentFile="currentFile"
-        @updateCode="updateCode" />
+        @updateCode="onUpdateCode" />
     </div>
   </template>
   
   <script setup>
   import { ref, onMounted, nextTick, computed } from 'vue';
-  import { fileTree } from '../utils/common';
+  import { fileTree, experience } from '../utils/constants';
   import { terminal, particles, fileNode, codeEditor, splitContainer } from '../utils/templates';
   import Split from 'split.js';
+  import TimeLine from '../components/TimeLine.vue'
   
   const splitInstance = ref(null);
   const currentFile = ref(null);
   const selectedFileId = ref(null);
   const tree = ref(fileTree)
   const code = ref('')
+  const isTimeLine = ref(false)
   const isMobile = computed(() => process.client && window.innerWidth <= 764)
+  const events = ref(experience)
+  const selectedExperience = ref(null);
+
   
   const updateSplit = () => {
     const terminalPane = document.querySelector('.terminal-pane');
@@ -501,6 +603,17 @@ export const splitContainer = `
       });
     }
   };
+
+  const onShowTimeLine = (value) => {
+    isTimeLine.value = value
+  }
+  const onSelectExeperience = (experience) => {
+      selectedExperience.value = experience;
+  };
+
+  const showTimeline = () => {
+  selectedExperience.value = null;
+};
   
   const resetSplit = () => {
     const terminalPane = document.querySelector('.terminal-pane');
@@ -548,9 +661,33 @@ export const splitContainer = `
     }
   };
   
-  const updateCode = (newCode) => {
+  const onUpdateCode = (newCode) => {
     code.value = newCode;
   };
+
+  const onBeforeEnter = (el) => {
+  el.style.transform = 'rotateY(-90deg)';
+  el.style.opacity = '0';
+};
+
+const onEnter = (el, done) => {
+  setTimeout(() => {
+    el.style.transition = 'transform 0.6s ease, opacity 0.6s ease';
+    el.style.transform = 'rotateY(0deg)';
+    el.style.opacity = '1';
+    done();
+  });
+};
+
+const onLeave = (el, done) => {
+  el.style.transition = 'transform 0.6s ease, opacity 0.6s ease';
+  el.style.transform = 'rotateY(90deg)';
+  el.style.opacity = '0';
+  setTimeout(() => {
+    done();
+  }, 600);
+};
+
   
   onMounted(() => {
     initializeDefaultFile();
@@ -580,8 +717,342 @@ export const splitContainer = `
     @apply cursor-row-resize h-[20px] w-full;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
   }
+  .detail-enter-active, .detail-leave-active {
+    transition: all 0.8s ease;
+  }
+  
+  .detail-enter-from, .detail-leave-to {
+    opacity: 0;
+    transform: translateY(50px) scale(0.8); /* Empieza desde abajo y con zoom reducido */
+  }
+  
+  .detail-enter-to, .detail-leave-from {
+    opacity: 1;
+    transform: translateY(0) scale(1); /* Termina en su posición normal con zoom normal */
+  }
+  </style>  
+`
+
+export const timeLine = `
+<template>
+    <div class="timeline-wrap">
+      <button
+        class="timeline-nav-button timeline-nav-button--prev transition-transform transform hover:scale-105 active:scale-95"
+        @click="prev"
+        :disabled="currentIndex === 0"
+      >
+      <img src="/assets/arrow-left.svg" alt="Prev" class="w-5 h-5" />
+      </button>
+  
+      <div class="timeline">
+        <div class="timeline-items" :style="{ transform: translateX({currentTranslate}px), height: '300px' }">
+          <div 
+            v-for="(event, index) in experience" 
+            :key="index" 
+            class="timeline-item"
+            :class="{ 'timeline-item--bottom': index % 2 !== 0 }"
+          >
+            <div 
+            class="timeline-content font-mono text-xs md:text-base" 
+            :class="[isDarkTheme ? 'bg-black text-white dark-theme' : 'bg-white text-black']"
+            @click="onSelectExperience(event)">
+              <h2 class="font-bold">{{ event.year }}</h2>
+              <div class="flex items-center">
+                  <img :src="event.img" class="w-10 h-10"/>
+                  <p class="ml-2">{{ event.text }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-divider"></div>
+        <div class="timeline-points">
+          <div 
+            v-for="(event, index) in experience" 
+            :key="'point-' + index" 
+            class="timeline-point"
+            :style="{ left: {index * itemWidth + itemWidth / 2}px }"
+          ></div>
+        </div>
+      </div>
+  
+      <button
+        class="timeline-nav-button timeline-nav-button--next transition-transform transform hover:scale-105 active:scale-95"
+        @click="next"
+        :disabled="currentIndex >= experience.length - visibleItems"
+      >
+      <img src="/assets/arrow-right.svg" alt="Prev" class="w-5 h-5" />
+      </button>
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref, computed, defineProps, defineEmits } from 'vue';
+  import { useTheme } from '~/composables/useTheme';
+
+  const props = defineProps({
+    experience: {
+        type: Array,
+        default: [{ year: '', text: '' }]
+    }
+  })
+  const emit = defineEmits(['selectExperience'])
+  const currentIndex = ref(0);
+  const itemWidth = 300;
+  const visibleItems = 2;
+  const currentTranslate = computed(() => -currentIndex.value * itemWidth);
+  const { isDarkTheme } = useTheme();
+
+  const onSelectExperience = (event) => emit('selectExperience', event)
+  
+  const prev = () => {
+    if (currentIndex.value > 0) {
+      currentIndex.value--;
+    }
+  }
+  
+  const next = () => {
+    if (currentIndex.value < props.experience.length - visibleItems) {
+      currentIndex.value++;
+    }
+  }
+  </script>
+  
+  <style lang="scss" scoped>
+  .timeline-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center ;
+    padding: 20px;
+    width: 60%;
+    position: absolute;
+    top: 20px;
+    left: 10%;
+    transform: translate(-20%, -20%);
+    z-index: 2;
+    @media (max-width: 795px) {
+      width: 100%;
+      top: 50px;
+      left: 0%;
+      padding: 10px;
+    }
+  }
+  
+  .timeline {
+    position: relative;
+    width: 80%;
+    overflow: hidden;
+  }
+  
+  .timeline-items {
+    display: flex;
+    transition: transform 0.8s ease;
+  }
+  
+  .timeline-item {
+    width: 300px; 
+    position: relative;
+    flex-shrink: 0;
+    top: 115px;
+  }
+  
+  .timeline-item--bottom .timeline-content {
+    margin-left: 30px;
+    position: relative;
+    top: 60px;
+  }
+  
+  .timeline-item--bottom .timeline-content::before {
+    content: '';
+    position: absolute;
+    left: 115px;
+    width: 0;
+    height: 0;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent #ddd  transparent;
+    transform: rotate(180deg);
+    top: -20px !important;
+  }
+  .timeline-item--bottom .dark-theme.timeline-content::before {
+    content: '';
+    position: absolute;
+    left: 115px;
+    width: 0;
+    height: 0;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+    transform: rotate(180deg);
+    top: -20px !important;
+  }
+  
+  .timeline-item .timeline-content {
+    margin-left: 30px;
+    position: relative;
+    bottom: 74px;
+    @media (max-width: 795px) {
+      width: 240px;
+    }
+  }
+  
+  .timeline-item .timeline-content::before {
+    content: '';
+    position: absolute;
+    left: 115px;
+    width: 0;
+    height: 0;
+    border-width: 10px;
+    border-style: solid;
+    border-color: #ddd transparent transparent transparent;
+    top: 84px;
+    @media (max-width: 795px) {
+      top: 77px;
+    }
+  }
+
+  .timeline-item .dark-theme.timeline-content::before {
+    content: '';
+    position: absolute;
+    left: 115px;
+    width: 0;
+    height: 0;
+    border-width: 10px;
+    border-style: solid;
+    border-color: white transparent transparent transparent;
+    top: 84px;
+    @media (max-width: 795px) {
+      top: 77px;
+    }
+  }
+  
+  .timeline-content {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .timeline-divider {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: #ddd;
+    transform: translateY(-50%);
+    z-index: 1;
+    margin-left: 3px;
+    margin-right: 3px;
+  }
+  
+  .timeline-nav-button {
+    background-color: #fff;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+  }
+  
+  .timeline-nav-button:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  
+  .timeline-points {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+  }
+  
+  .timeline-point {
+    width: 12px;
+    height: 12px;
+    background: #ddd;
+    border-radius: 50%;
+    position: absolute;
+    top: -6px;
+  }
   </style>
-  
-  
-    
+`
+
+export const cardDetail = `
+<template>
+  <div 
+    class="detail-container absolute font-mono text-xs md:text-base"  
+    :class="[isDarkTheme ? 'bg-black text-white border-[#ddd]' : 'bg-white text-black border-[#ddd]']"
+    style="top: 100px">
+    <h2 class="font-bold mb-1">{{ experience.text }}</h2>
+    <p>{{ translateDescription}}</p>
+    <button 
+    class="back-arrow font-mono text-xs md:text-base transition-transform transform hover:scale-105 active:scale-95" @click="$emit('goBack')"
+    :class="[isDarkTheme ? 'bg-white text-black' : 'bg-black text-white']"
+    >{{ $t('card-detail.back') }}</button>
+  </div>
+</template>
+
+<script setup>
+import { defineProps, computed } from 'vue'
+import { useTheme } from '~/composables/useTheme'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
+const props = defineProps({
+  experience: {
+    type: Object,
+    required: true
+  }
+})
+const { isDarkTheme } = useTheme()
+const translateDescription = computed(() => t(props.experience.description))
+
+</script>
+
+<style scoped>
+.detail-container {
+  position: relative;
+  padding: 20px;
+  width: 70%;
+  margin: auto;
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px solid;
+  @media (max-width: 795px) {
+      width: 100%;
+    }
+}
+
+.back-arrow {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+</style>
+`
+
+export const app = `
+<template>
+  <div>
+    <ChangeTheme />
+    <ChangeLanguage />
+    <Particles />
+    <SplitContainer />
+  </div>
+</template>
+
+<style>
+body {
+  margin: 0;
+}
+</style>
+
 `

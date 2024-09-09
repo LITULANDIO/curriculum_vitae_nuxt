@@ -5,14 +5,15 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
 import { tsParticles } from 'tsparticles-engine';
 import { loadImageShape } from 'tsparticles-shape-image';
 import { loadSlim } from 'tsparticles-slim';
-import { detectDevice } from '../utils/common'
 import { useTheme } from '~/composables/useTheme';
 
 const { isDarkTheme } = useTheme()
+const isMobile = computed(() => process.client && window.innerWidth <= 764)
+
 const particlesOptions = {
   fullScreen: {
     enable: true,
@@ -20,7 +21,7 @@ const particlesOptions = {
   },
   particles: {
     number: {
-      value: detectDevice() === 'desktop' ? 50 : 10
+      value: isMobile ? 10 : 50
     },
     shape: {
       type: 'image',

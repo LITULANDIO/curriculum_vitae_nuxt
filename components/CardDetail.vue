@@ -1,0 +1,52 @@
+<template>
+  <div 
+    class="detail-container absolute font-mono text-xs md:text-base"  
+    :class="[isDarkTheme ? 'bg-black text-white border-[#ddd]' : 'bg-white text-black border-[#ddd]']"
+    style="top: 100px">
+    <h2 class="font-bold mb-1">{{ experience.text }}</h2>
+    <p>{{ translateDescription}}</p>
+    <button 
+    class="back-arrow font-mono text-xs md:text-base transition-transform transform hover:scale-105 active:scale-95" @click="$emit('goBack')"
+    :class="[isDarkTheme ? 'bg-white text-black' : 'bg-black text-white']"
+    >{{ $t('card-detail.back') }}</button>
+  </div>
+</template>
+
+<script setup>
+import { defineProps, computed } from 'vue'
+import { useTheme } from '~/composables/useTheme'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
+const props = defineProps({
+  experience: {
+    type: Object,
+    required: true
+  }
+})
+const { isDarkTheme } = useTheme()
+const translateDescription = computed(() => t(props.experience.description))
+
+</script>
+
+<style scoped>
+.detail-container {
+  position: relative;
+  padding: 20px;
+  width: 70%;
+  margin: auto;
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px solid;
+  @media (max-width: 795px) {
+      width: 100%;
+    }
+}
+
+.back-arrow {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+</style>

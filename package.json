@@ -15,10 +15,13 @@
     "@tailwindcss/line-clamp": "0.4.2",
     "@tsparticles/vue3": "3.0.1",
     "@vueuse/core": "11.0.3",
+    "axios": "^1.7.7",
     "monaco-editor": "^0.51.0",
     "nuxt": "3.4.0",
     "nuxt-monaco-editor": "1.2.9",
     "nuxt-particles": "0.3.0",
+    "resend": "^4.0.0",
+    "sass": "^1.77.8",
     "split.js": "1.6.5",
     "tsparticles": "3.5.0",
     "tsparticles-engine": "2.12.0",
@@ -33,6 +36,7 @@
     "postcss": "8.4.20",
     "postcss-import": "15.1.0",
     "sass-embedded": "1.77.8",
-    "tailwindcss": "3.2.4"
+    "tailwindcss": "3.2.4",
+    "vue-i18n": "^9.14.0"
   }
 }
