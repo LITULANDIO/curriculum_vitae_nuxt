@@ -50,7 +50,7 @@
   const code = ref('')
   const isTimeLine = ref(false)
   const isFormContact = ref(false)
-  const isMobile = computed(() => process.client && window.innerWidth <= 764)
+  const isMobile = computed(() => process.client && window.innerWidth < 515)
   const events = ref(experience)
   const selectedExperience = ref(null);
 
