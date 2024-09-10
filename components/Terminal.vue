@@ -73,7 +73,7 @@
   const { t, locale } = useI18n()
   const terminalContainer = ref(null)
 
-  const emit = defineEmits(['showTimeLine'])
+  const emit = defineEmits(['showTimeLine', 'showFormContact'])
 
   const commands = computed(() => [
   t('terminal.commands1'),
@@ -136,11 +136,17 @@
   const sendEmiterHiddenTimeLine = () => {
     emit('showTimeLine', false)
   }
+  const sendEmiterShowContactForm = () => {
+    emit('showFormContact', true)
+  }
+  const sendEmiterHiddenContactForm = () => {
+    emit('showFormContact', false)
+  }
 
   const downloadPDF = () => {
     const link = document.createElement('a');
     link.href = '/api/pdf';
-    link.download = 'curriculum_carles.pdf';
+    link.download = 'cv_litus.png';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -154,9 +160,11 @@
       case 'ayuda': 
         outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
         sendEmiterHiddenTimeLine()
+        sendEmiterHiddenContactForm()
         break;
       case 'experiencia':
         sendEmiterShowTimeLine()
+        sendEmiterHiddenContactForm()
         outputLines.value.push('terminal.commands10');
         hiddenInput.value.blur()
         break;
@@ -164,17 +172,20 @@
         window.open('https://github.com/LITULANDIO', '_blank');
         outputLines.value.push('terminal.commands8');
         sendEmiterHiddenTimeLine()
+        sendEmiterHiddenContactForm()
         break;
       case 'contacto':
-        // TODO
+        sendEmiterShowContactForm()
         break;
       case 'descargar_cv':
         downloadPDF()
         outputLines.value.push('terminal.commands9');
         sendEmiterHiddenTimeLine()
+        sendEmiterHiddenContactForm()
         break;
       case 'limpiar':
         sendEmiterHiddenTimeLine()
+        sendEmiterHiddenContactForm()
         outputLines.value = [];
         break;
       default:
@@ -191,9 +202,11 @@
       case 'help':
         outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
         sendEmiterHiddenTimeLine()
+        sendEmiterHiddenContactForm()
         break;
       case 'experience':
         sendEmiterShowTimeLine()
+        sendEmiterHiddenContactForm()
         outputLines.value.push('terminal.commands10');
         hiddenInput.value.blur()
         break;
@@ -201,18 +214,21 @@
         window.open('https://github.com/LITULANDIO', '_blank');
         outputLines.value.push('terminal.commands8');
         sendEmiterHiddenTimeLine()
+        sendEmiterHiddenContactForm()
         break;
       case 'contact':
-        outputLines.value.push('TODO: link per veure un formuli de contacte');
+        sendEmiterShowContactForm()
         sendEmiterHiddenTimeLine()
         break;
       case 'download_cv':
         downloadPDF()
         outputLines.value.push('terminal.commands9');
         sendEmiterHiddenTimeLine()
+        sendEmiterHiddenContactForm()
         break;
       case 'clear':
         sendEmiterHiddenTimeLine()
+        sendEmiterHiddenContactForm()
         outputLines.value = [];
         break;
       default:

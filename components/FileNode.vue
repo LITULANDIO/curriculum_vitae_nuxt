@@ -1,5 +1,5 @@
 <template>
-  <div class="file-tree w-64 overflow-auto md:h-full md:overflow-y-auto"
+  <div class="file-tree w-64 overflow-auto md:h-full md:overflow-y-auto z-10"
     :class="[isDarkTheme ? 'shadow-shadow-white bg-[#2d2d2d] text-white' : 'shadow-shadow-dark bg-white text-black']"
   >
     <ul class="list-none pl-5">

@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen px-2">
+    <div class="h-screen px-2" :class="!isMobile ? 'flex' : ''">
       <div class="flex flex-col terminal-pane">
         <transition  
           @before-enter="onBeforeEnter"
@@ -11,6 +11,7 @@
             @selectExperience="onSelectExeperience"
             />
         </transition>
+        <ContactForm :isVisible="isFormContact" @close="isFormContact = false"/>
         <transition name="detail">
           <CardDetail 
             v-if="selectedExperience"
@@ -19,7 +20,7 @@
             @goBack="showTimeline"
           />
         </transition>
-        <Terminal @showTimeLine="onShowTimeLine"/>
+        <Terminal @showTimeLine="onShowTimeLine" @showFormContact="onShowFormContact"/>
       </div>
       <FileNode 
           v-if="!isMobile"
@@ -48,6 +49,7 @@
   const tree = ref(fileTree)
   const code = ref('')
   const isTimeLine = ref(false)
+  const isFormContact = ref(false)
   const isMobile = computed(() => process.client && window.innerWidth <= 764)
   const events = ref(experience)
   const selectedExperience = ref(null);
@@ -71,6 +73,10 @@
 
   const onShowTimeLine = (value) => {
     isTimeLine.value = value
+  }
+  const onShowFormContact = (value) => {
+    console.log({value})
+    isFormContact.value = value
   }
   const onSelectExeperience = (experience) => {
       selectedExperience.value = experience;

@@ -1,5 +1,5 @@
 <template>
-    <div class="timeline-wrap">
+    <div class="timeline-wrap z-0">
       <button
         class="timeline-nav-button timeline-nav-button--prev transition-transform transform hover:scale-105 active:scale-95"
         @click="prev"

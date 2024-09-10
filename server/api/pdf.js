@@ -2,12 +2,12 @@ import { createReadStream } from 'fs';
 import { resolve } from 'path';
 
 export default defineEventHandler((event) => {
-  const filePath = resolve('public/files/CV_LITUS.pdf');
+  const filePath = resolve('public/files/cv_litus.png');
   const stream = createReadStream(filePath);
 
   setHeaders(event, {
     'Content-Type': 'application/pdf',
-    'Content-Disposition': 'attachment; filename="curriculum_carles.pdf"',
+    'Content-Disposition': 'attachment; filename="cv_litus.png"',
   });
 
   return stream;
