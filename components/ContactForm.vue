@@ -9,12 +9,12 @@
       
       <form @submit.prevent="submitForm" class="space-y-6">
         <div>
-          <label for="email" class="block text-sm font-medium">Email</label>
+          <label for="email" class="block text-sm font-medium">{{ $t('contact-form.email') }}</label>
           <input
             type="email"
             id="email"
             v-model="email"
-            placeholder="Enter your email"
+            :placeholder="$t('contact-form.placeholder1')"
             class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 sm:text-sm"
             :class="[isDarkTheme ? 'text-black' : 'text-white']"
             required
@@ -22,12 +22,12 @@
         </div>
 
         <div>
-          <label for="subject" class="block text-sm font-medium">Subject</label>
+          <label for="subject" class="block text-sm font-medium">{{ $t('contact-form.subject') }}</label>
           <input
             type="text"
             id="subject"
             v-model="subject"
-            placeholder="Subject"
+            :placeholder="t('contact-form.subject')"
             class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
             :class="[isDarkTheme ? 'text-black' : 'text-white']"
             required
@@ -35,11 +35,11 @@
         </div>
 
         <div>
-          <label for="message" class="block text-sm font-medium">Message</label>
+          <label for="message" class="block text-sm font-medium">{{ $t('contact-form.message') }}</label>
           <textarea
             id="message"
             v-model="message"
-            placeholder="Write your message..."
+            :placeholder="$t('contact-form.message')"
             class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
             :class="[isDarkTheme ? 'text-black' : 'text-white']"
             rows="5"
@@ -53,7 +53,7 @@
             class="w-full py-2 px-4 rounded-md hover:scale-105 active:scale-95"
             :class="[isDarkTheme ? 'bg-white text-black border-white' : 'bg-black text-white']"
           >
-            Send
+            {{ $t('contact-form.send') }}
           </button>
         </div>
 
@@ -69,8 +69,10 @@
 import { ref } from 'vue';
 import { useFetch } from 'nuxt/app';
 import { useTheme } from '~/composables/useTheme';
+import { useI18n } from 'vue-i18n'
 
 const { isDarkTheme } = useTheme();
+const { t } = useI18n()
 
 const email = ref('');
 const subject = ref('');
@@ -92,15 +94,15 @@ const submitForm = async () => {
     });
 
     if (error.value) {
-      responseMessage.value = 'Failed to send the message. Please try again.';
+      responseMessage.value = t('contact-form.error1');
     } else {
-      responseMessage.value = 'Message sent successfully!';
+      responseMessage.value = t('contact-form.ok')
       setTimeout(() => {
         isShowForm.value = false
       })
     }
   } catch (error) {
-    responseMessage.value = 'An error occurred. Please try again.';
+    responseMessage.value = t('contact-form.error2')
   }
 }
 </script>

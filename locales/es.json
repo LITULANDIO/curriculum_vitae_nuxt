@@ -24,6 +24,16 @@
       "t2client": "Diseño y desarrollo de la arquitectura del front-end de un proyecto del sector logística, implementación de componentes asociados al diseño de Figma a Storybook, desacoplando cualquier enlace que no lo haga intrínseco, instalación y configuración de librerías tanto de desarrollo como de estilos (tailwind). Ensamblar los componentes de Storybook al front-end, liderando la migración de vue2 a vue3 para mayor consistencia. Desarrollo de dataproviders y computación de datos JSON. Migración y documentación de todos los componentes a la nueva y última versión de Storybook automatizada con Chromatic y apoyo al equipo de Front-end.",
       "coneptum": "Agencia Tecnológica de IA, Principalmente desarrollo de SPA con VUE (x2), control de estados con vuex, maquetación con la ayuda de Vuetify, scss, creación de componentes en base a Figma y conectar api rest con Graphql. Desarrollo de funcionalidades en otros proyectos con Angular. Metodologia agile con Trello, y control de versiones GITHUB.",
       "casals-online": "Agencia de marketing online, empezando como junior en un equipo pequeño, asumiendo responsabilidades del propio departamento. Desarrollo de proyectos con CMS wordpress, prestashop, typo3, maquetación de landing pages, spa con Angular, Ionic 3. Resolución de incidencias con Jira service desk, Agile con Jira, trello."
+    },
+    "contact-form": {
+      "email": "Email",
+      "placeholder1": "Introduce tu email",
+      "subject": "Asunto",
+      "message": "Mensaje",
+      "send": "Enviar",
+      "error1": "No se ha podido enviar el mensaje. Por favor, inténtalo de nuevo.",
+      "error2": "Se ha producido un error. Por favor, inténtelo de nuevo.",
+      "ok": "¡Mensaje enviado con éxito!"
     }
   }
   

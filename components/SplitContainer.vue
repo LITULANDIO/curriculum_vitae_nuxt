@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen px-2" :class="!isMobile ? 'flex' : ''">
+    <div class="h-screen px-2 md:flex">
       <div class="flex flex-col terminal-pane">
         <transition  
           @before-enter="onBeforeEnter"
