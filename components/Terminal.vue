@@ -308,7 +308,7 @@ const handleResize = () => {
   <style lang="postcss">
 
   .terminal-container {
-    top: 23rem;
+    top: 20rem;
     @media (max-width: 795px) {
       top: 5rem;
     }
