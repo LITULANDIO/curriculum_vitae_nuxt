@@ -1,6 +1,6 @@
 <template>
-  <div ref="terminalPane" class="inset-0 flex items-center justify-center overflow-auto terminal-pane">
-    <div class="mx-auto w-full max-w-[600px]  px-[10px] h-auto absolute -z-10 terminal-container">
+  <div ref="terminalPane" class="inset-0 flex items-center justify-center">
+    <div ref="terminalContainer" class="mx-auto w-full max-w-[600px]  px-[10px] h-auto absolute z-10 terminal-container" @click="focusHiddenInput" @touch="focusHiddenInput">
       <div
         class="relative w-full rounded-[10px] flex flex-col overflow-hidden font-mono text-left bg-transparent h-[350px] md:h-[420px]"
         :class="[isDarkTheme ? 'text-white' : 'text-black', isDarkTheme ? 'shadow-shadow-white' : 'shadow-shadow-dark']">
@@ -71,6 +71,7 @@
   const editorInstance = ref(null);
   const { isDarkTheme } = useTheme();
   const { t, locale } = useI18n()
+  const terminalContainer = ref(null)
 
   const emit = defineEmits(['showTimeLine'])
 
@@ -290,11 +291,10 @@ const handleResize = () => {
 
   onMounted(() => {
     console.log(locale.value)
-    focusHiddenInput();
     typeCommand();
     blinkCursor();
-    window.addEventListener('touchstart', handleTouchStart)
-    window.addEventListener('keydown', handleKeyPress)
+    terminalContainer.value.addEventListener('touchstart', handleTouchStart)
+    terminalContainer.value.addEventListener('keydown', handleKeyPress)
     window.addEventListener('resize', handleResize)
   })
 
@@ -317,10 +317,6 @@ const handleResize = () => {
     @apply fixed bottom-0 right-0 w-1/3 h-20 transition-all duration-300 z-20;
   }
 
-  .terminal-pane {
-    @apply w-full h-full overflow-auto;
-  }
-  
   .terminal-minimized {
     @apply w-full h-20;
   }

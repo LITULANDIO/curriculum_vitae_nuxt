@@ -1,6 +1,6 @@
 <template>
     <div class="h-screen flex px-2">
-      <div class="flex flex-col terminal-pane">
+      <div class="terminal-pane">
         <transition  
           @before-enter="onBeforeEnter"
           @enter="onEnter"

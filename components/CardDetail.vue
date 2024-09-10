@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="detail-container absolute font-mono text-xs md:text-base"  
+    class="detail-container absolute font-mono text-xs md:text-base z-20"  
     :class="[isDarkTheme ? 'bg-black text-white border-[#ddd]' : 'bg-white text-black border-[#ddd]']"
     >
     <h2 class="font-bold mb-1">{{ experience.text }}</h2>

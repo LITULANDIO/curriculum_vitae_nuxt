@@ -89,7 +89,6 @@
     padding: 20px;
     width: 60%;
     position: absolute;
-    top: 20px;
     left: 10%;
     transform: translate(-20%, -20%);
     z-index: 2;
