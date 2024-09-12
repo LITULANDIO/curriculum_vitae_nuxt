@@ -6,9 +6,19 @@
           @enter="onEnter"
           @leave="onLeave">
           <TimeLine 
-            v-show="isTimeLine && !selectedExperience"
-            :experience="events"
-            @selectExperience="onSelectExeperience"
+            v-show="isTimeLineExperience && !selectedExperience"
+            :events="experiences"
+            @selectEvent="onSelectExeperience"
+            />
+        </transition>
+        <transition  
+          @before-enter="onBeforeEnter"
+          @enter="onEnter"
+          @leave="onLeave">
+          <TimeLine 
+            v-show="isTimeLineAcademy && !selectedAcademy"
+            :events="academies"
+            @selectEvent="onSelectAcademy"
             />
         </transition>
         <ContactForm :isVisible="isFormContact" @close="isFormContact = false"/>
@@ -20,15 +30,18 @@
             @goBack="showTimeline"
           />
         </transition>
-        <Terminal @showTimeLine="onShowTimeLine" @showFormContact="onShowFormContact"/>
+        <Terminal v-if="isDelayShowComponents" 
+          @showTimeLineExperience="onShowTimeLineExperience" 
+          @showTimeLineAcademy="onShowTimeLineAcademy"
+          @showFormContact="onShowFormContact"/>
       </div>
       <FileNode 
-          v-if="!isMobile"
+          v-if="!isMobile && isDelayShowComponents"
           :nodes="tree" 
           :selectedFileId="selectedFileId"
           @selectNode="loadFileContent" />
       <CodeEditor 
-        v-if="!isMobile"
+        v-if="!isMobile && isDelayShowComponents"
         class="editor-container" 
         :currentCode="code"
         :currentFile="currentFile"
@@ -36,23 +49,28 @@
     </div>
   </template>
   
+  // https://www.campusmvp.es/certificados/carles-far-pierres/4701
   <script setup>
   import { ref, onMounted, nextTick, computed } from 'vue';
-  import { fileTree, experience } from '../utils/constants';
+  import { fileTree, experience, academy } from '../utils/constants';
   import { terminal, particles, fileNode, codeEditor, splitContainer, timeLine, cardDetail, app } from '../utils/templates';
   import Split from 'split.js';
   import TimeLine from '../components/TimeLine.vue'
   
-  const splitInstance = ref(null);
-  const currentFile = ref(null);
-  const selectedFileId = ref(null);
+  const splitInstance = ref(null)
+  const currentFile = ref(null)
+  const selectedFileId = ref(null)
   const tree = ref(fileTree)
   const code = ref('')
-  const isTimeLine = ref(false)
+  const isTimeLineExperience = ref(false)
+  const isTimeLineAcademy = ref(false)
   const isFormContact = ref(false)
   const isMobile = computed(() => process.client && window.innerWidth < 515)
-  const events = ref(experience)
-  const selectedExperience = ref(null);
+  const experiences = ref(experience)
+  const academies = ref(academy)
+  const selectedExperience = ref(null)
+  const selectedAcademy = ref(null)
+  const isDelayShowComponents = ref(false)
 
   
   const updateSplit = () => {
@@ -71,8 +89,11 @@
     }
   };
 
-  const onShowTimeLine = (value) => {
-    isTimeLine.value = value
+  const onShowTimeLineExperience = (value) => {
+    isTimeLineExperience.value = value
+  }
+  const onShowTimeLineAcademy = (value) => {
+    isTimeLineAcademy.value = value
   }
   const onShowFormContact = (value) => {
     console.log({value})
@@ -80,11 +101,14 @@
   }
   const onSelectExeperience = (experience) => {
       selectedExperience.value = experience;
-  };
-
+  }
+  const onSelectAcademy = (academy) => {
+    selectedAcademy.value = academy
+  }
   const showTimeline = () => {
-  selectedExperience.value = null;
-};
+    selectedExperience.value = null
+    selectedAcademy.value = null
+  }
   
   const resetSplit = () => {
     const terminalPane = document.querySelector('.terminal-pane');
@@ -163,9 +187,9 @@ const onLeave = (el, done) => {
 
   
   onMounted(() => {
-    initializeDefaultFile();
-
     nextTick(() => {
+      isDelayShowComponents.value = true
+      initializeDefaultFile();
       updateSplit();
     });
     window.addEventListener('resize', () => {

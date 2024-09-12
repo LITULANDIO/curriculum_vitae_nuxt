@@ -11,7 +11,7 @@
       <div class="timeline">
         <div class="timeline-items" :style="{ transform: `translateX(${currentTranslate}px)`, height: '300px' }">
           <div 
-            v-for="(event, index) in experience" 
+            v-for="(event, index) in events" 
             :key="index" 
             class="timeline-item"
             :class="{ 'timeline-item--bottom': index % 2 !== 0 }"
@@ -54,19 +54,19 @@
   import { useTheme } from '~/composables/useTheme';
 
   const props = defineProps({
-    experience: {
+    events: {
         type: Array,
         default: [{ year: '', text: '' }]
     }
   })
-  const emit = defineEmits(['selectExperience'])
+  const emit = defineEmits(['selectEvent'])
   const currentIndex = ref(0);
   const itemWidth = 300;
   const visibleItems = 2;
   const currentTranslate = computed(() => -currentIndex.value * itemWidth);
   const { isDarkTheme } = useTheme();
 
-  const onSelectExperience = (event) => emit('selectExperience', event)
+  const onSelectExperience = (event) => emit('selectEvent', event)
   
   const prev = () => {
     if (currentIndex.value > 0) {
@@ -75,7 +75,7 @@
   }
   
   const next = () => {
-    if (currentIndex.value < props.experience.length - visibleItems) {
+    if (currentIndex.value < props.events.length - visibleItems) {
       currentIndex.value++;
     }
   }

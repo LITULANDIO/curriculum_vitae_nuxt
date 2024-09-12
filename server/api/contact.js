@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const response = await resend.emails.send({
-      from: 'litulandio@gmail.com',
+      from: 'contacto@carlesfar.com',
       to: body.email,
       subject: 'Contact Form Submission',
       html: `<p>${body.message}</p>`,

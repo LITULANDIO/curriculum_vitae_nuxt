@@ -6,7 +6,7 @@ export default defineEventHandler((event) => {
   const stream = createReadStream(filePath);
 
   setHeaders(event, {
-    'Content-Type': 'application/pdf',
+    'Content-Type': 'application/png',
     'Content-Disposition': 'attachment; filename="cv_litus.png"',
   });
 

@@ -73,7 +73,7 @@
   const { t, locale } = useI18n()
   const terminalContainer = ref(null)
 
-  const emit = defineEmits(['showTimeLine', 'showFormContact'])
+  const emit = defineEmits(['showTimeLineExperience', 'showTimeLineAcademy', 'showFormContact'])
 
   const commands = computed(() => [
   t('terminal.commands1'),
@@ -130,17 +130,23 @@
     })
   })
 
-  const sendEmiterShowTimeLine = () => {
-    emit('showTimeLine', true)
+  const sendEmiterShowTimeLineExperience = () => {
+    emit('showTimeLineExperience', true)
   }
-  const sendEmiterHiddenTimeLine = () => {
-    emit('showTimeLine', false)
+  const sendEmiterHiddenTimeLineExperience = () => {
+    emit('showTimeLineExperience', false)
   }
   const sendEmiterShowContactForm = () => {
     emit('showFormContact', true)
   }
   const sendEmiterHiddenContactForm = () => {
     emit('showFormContact', false)
+  }
+  const sendEmiterShowTimelineAcademy = () => {
+    emit('showTimeLineAcademy', true)
+  }
+  const sendEmiterHiddenTimelineAcademy = () => {
+    emit('showTimeLineAcademy', false)
   }
 
   const downloadPDF = () => {
@@ -158,34 +164,46 @@
     }
     switch (input.toLowerCase()) {
       case 'ayuda': 
-        outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
-        sendEmiterHiddenTimeLine()
+        outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help7', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
+        sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenContactForm()
+        sendEmiterHiddenTimelineAcademy()
         break;
       case 'experiencia':
-        sendEmiterShowTimeLine()
+        sendEmiterShowTimeLineExperience()
         sendEmiterHiddenContactForm()
+        sendEmiterHiddenTimelineAcademy()
         outputLines.value.push('terminal.commands10');
         hiddenInput.value.blur()
+        break;
+      case 'formacion': 
+        sendEmiterShowTimelineAcademy()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenContactForm()
         break;
       case 'proyectos':
         window.open('https://github.com/LITULANDIO', '_blank');
         outputLines.value.push('terminal.commands8');
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenContactForm()
+        sendEmiterHiddenTimelineAcademy()
         break;
       case 'contacto':
         sendEmiterShowContactForm()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
         break;
       case 'descargar_cv':
         downloadPDF()
         outputLines.value.push('terminal.commands9');
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenContactForm()
+        sendEmiterHiddenTimelineAcademy()
         break;
       case 'limpiar':
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenContactForm()
+        sendEmiterHiddenTimelineAcademy()
         outputLines.value = [];
         break;
       default:
@@ -200,34 +218,45 @@
     }
     switch (input.toLowerCase()) {
       case 'help':
-        outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
-        sendEmiterHiddenTimeLine()
+        outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help7', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
         sendEmiterHiddenContactForm()
         break;
       case 'experience':
-        sendEmiterShowTimeLine()
+        sendEmiterShowTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
         sendEmiterHiddenContactForm()
         outputLines.value.push('terminal.commands10');
         hiddenInput.value.blur()
         break;
+      case 'academy': 
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenContactForm()
+        break;
       case 'projects':
         window.open('https://github.com/LITULANDIO', '_blank');
         outputLines.value.push('terminal.commands8');
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
         sendEmiterHiddenContactForm()
         break;
       case 'contact':
         sendEmiterShowContactForm()
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
         break;
       case 'download_cv':
         downloadPDF()
         outputLines.value.push('terminal.commands9');
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
         sendEmiterHiddenContactForm()
         break;
       case 'clear':
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
         sendEmiterHiddenContactForm()
         outputLines.value = [];
         break;

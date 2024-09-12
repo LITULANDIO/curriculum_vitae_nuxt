@@ -30,3 +30,10 @@ export const experience = [
     {title: 'TITULO', description: 'card-detail.casals-online', year: '2017-19', img: '/assets/casals_online.png', text: 'CASALS ONLINE'},
     {title: 'TITULO', description: 'Aixo es una descripcio del meu cv', year: '2004-16', img: '/assets/pinturas_far.png', text: 'PINTURAS FAR'},
   ]
+
+export const academy = [
+  {text: 'CAMPUS MVP', year: '2019-20', img: '/assets/campusmvp.png', link: 'https://www.campusmvp.es/certificados/carles-far-pierres/4701'},
+  {text: 'ISDI CODERS', year: '2016-17', img: '/assets/isdicoders.png', link: 'https://isdicoders.com/'},
+  {text: 'STUCOM', year: '2013-17', img:'/assets/stucom.png', link: 'https://www.stucom.com/'},
+  {text: 'UB UNIVERSITAT', year: '2012-13', img: '/assets/ub.png', link: ''}
+]
