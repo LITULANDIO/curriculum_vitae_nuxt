@@ -30,6 +30,14 @@
             @goBack="showTimeline"
           />
         </transition>
+        <transition name="detail">
+          <CardDetail 
+            v-if="selectedAcademy"
+            class="absolute w-full"
+            :experience="selectedAcademy"
+            @goBack="showTimeline"
+          />
+        </transition>
         <Terminal v-if="isDelayShowComponents" 
           @showTimeLineExperience="onShowTimeLineExperience" 
           @showTimeLineAcademy="onShowTimeLineAcademy"

@@ -38,7 +38,7 @@ const translateDescription = computed(() => t(props.experience.description))
   padding: 15px;
   border-radius: 15px;
   border: 1px solid;
-  top: 100px;
+  top: -15rem;
   @media (max-width: 795px) {
       width: 100%;
       top: 20rem;

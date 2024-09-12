@@ -32,8 +32,8 @@ export const experience = [
   ]
 
 export const academy = [
-  {text: 'CAMPUS MVP', year: '2019-20', img: '/assets/campusmvp.png', link: 'https://www.campusmvp.es/certificados/carles-far-pierres/4701'},
-  {text: 'ISDI CODERS', year: '2016-17', img: '/assets/isdicoders.png', link: 'https://isdicoders.com/'},
-  {text: 'STUCOM', year: '2013-17', img:'/assets/stucom.png', link: 'https://www.stucom.com/'},
-  {text: 'UB UNIVERSITAT', year: '2012-13', img: '/assets/ub.png', link: ''}
+  {description: 'Certificado de Programación avanzada con Javascript y ECMA6', text: 'CAMPUS MVP', year: '2019-20', img: '/assets/campusmvp.png', link: 'https://www.campusmvp.es/certificados/carles-far-pierres/4701'},
+  {description: 'Bootcamp de desarrollo web full stack con javascript', text: 'ISDI CODERS', year: '2016-17', img: '/assets/isdicoders.png', link: 'https://isdicoders.com/'},
+  {description: 'Formación de grado superior como técnico superior en diseño i desarrollo web (daw)', text: 'STUCOM', year: '2013-17', img:'/assets/stucom.png', link: 'https://www.stucom.com/'},
+  {description: 'Prueba acceso mayores de 25 años a la universidad y/o formación de grado superior', text: 'UB UNIVERSITAT', year: '2012-13', img: '/assets/ub.png', link: ''}
 ]
