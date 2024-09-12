@@ -26,7 +26,12 @@
       "azertium": "Front end developer in a major project in the tourism sector, reference in the AM team, solving bugs throughout the project and implementation of new developments based on figma with jspx technologies, microservices with vue2, vue3, nuxt3, native javascript. Currently as a teach lead, mentoring junior profiles of the team, giving support and providing solutions on an ongoing basis. Agile methodology with Jira and Gitlab version control.",
       "t2client": "Design and development of the front-end architecture of a logistics sector project, implementation of components associated with the Figma design to Storybook, decoupling any links that do not make it intrinsic, installation and configuration of both development and style libraries (tailwind). Assembling Storybook components to the front-end, leading the migration from vue2 to vue3 for consistency. Development of dataproviders and JSON data computation. Migration and documentation of all components to the new and latest version of Storybook automated with Chromatic and support to the Front-end team.",
       "coneptum": "AI Technology Agency, Mainly SPA development with VUE (x2), state control with vuex, layout with the help of Vuetify, scss, component creation based on Figma and connecting api rest with Graphql. Development of functionalities in other projects with Angular. Agile methodology with Trello, and GITHUB version control.",
-      "casals-online": "Online marketing agency, starting as a junior in a small team, taking responsibility for the department itself. Development of projects with CMS wordpress, prestashop, typo3, landing page layout, spa with Angular, Ionic 3. Incident resolution with Jira service desk, Agile with Jira, trello."
+      "casals-online": "Online marketing agency, starting as a junior in a small team, taking responsibility for the department itself. Development of projects with CMS wordpress, prestashop, typo3, landing page layout, spa with Angular, Ionic 3. Incident resolution with Jira service desk, Agile with Jira, trello.",
+      "pinturasfar": "1st Officer, painter and decorator of interiors and exteriors, from exposed brickwork, flats, houses, premises, large surfaces, hotels, to the restoration of a castle, using colour and spatula techniques.",
+      "campus": "Certificate in Advanced Programming with Javascript and ECMA6",
+      "isdi": "Full stack web development bootcamp with javascript",
+      "stucom": "Higher level training as a technician in web design and development (daw)",
+      "ub": "University entrance exams for over 25s and/or higher education"
     },
     "contact-form": {
       "email": "Email",

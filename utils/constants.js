@@ -28,12 +28,12 @@ export const experience = [
     {title: 'TITULO', description: 'card-detail.t2client', year: '2020-21', img: '/assets/t2client.png', text: 'T2CLIENT'},
     {title: 'TITULO', description: 'card-detail.coneptum', year: '2020-20', img: '/assets/coneptum.png', text: 'CONEPTUM AI'},
     {title: 'TITULO', description: 'card-detail.casals-online', year: '2017-19', img: '/assets/casals_online.png', text: 'CASALS ONLINE'},
-    {title: 'TITULO', description: 'Aixo es una descripcio del meu cv', year: '2004-16', img: '/assets/pinturas_far.png', text: 'PINTURAS FAR'},
+    {title: 'TITULO', description: 'card-detail.pinturasfar', year: '2004-16', img: '/assets/pinturas_far.png', text: 'PINTURAS FAR'},
   ]
 
 export const academy = [
-  {description: 'Certificado de Programación avanzada con Javascript y ECMA6', text: 'CAMPUS MVP', year: '2019-20', img: '/assets/campusmvp.png', link: 'https://www.campusmvp.es/certificados/carles-far-pierres/4701'},
-  {description: 'Bootcamp de desarrollo web full stack con javascript', text: 'ISDI CODERS', year: '2016-17', img: '/assets/isdicoders.png', link: 'https://isdicoders.com/'},
-  {description: 'Formación de grado superior como técnico superior en diseño i desarrollo web (daw)', text: 'STUCOM', year: '2013-17', img:'/assets/stucom.png', link: 'https://www.stucom.com/'},
-  {description: 'Prueba acceso mayores de 25 años a la universidad y/o formación de grado superior', text: 'UB UNIVERSITAT', year: '2012-13', img: '/assets/ub.png', link: ''}
+  {description: 'card-detail.campus', text: 'CAMPUS MVP', year: '2019-20', img: '/assets/campusmvp.png', link: 'https://www.campusmvp.es/certificados/carles-far-pierres/4701'},
+  {description: 'card-detail.isdi', text: 'ISDI CODERS', year: '2016-17', img: '/assets/isdicoders.png', link: 'https://isdicoders.com/'},
+  {description: 'card-detail.stucom', text: 'STUCOM', year: '2013-17', img:'/assets/stucom.png', link: 'https://www.stucom.com/'},
+  {description: 'card-detail.ub', text: 'UB UNIVERSITAT', year: '2012-13', img: '/assets/ub.png', link: ''}
 ]

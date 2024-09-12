@@ -194,6 +194,7 @@
         sendEmiterShowContactForm()
         sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenTimelineAcademy()
+        hiddenInput.value.blur()
         break;
       case 'descargar_cv':
         downloadPDF()
@@ -250,6 +251,7 @@
         sendEmiterShowContactForm()
         sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenTimelineAcademy()
+        hiddenInput.value.blur()
         break;
       case 'download_cv':
         downloadPDF()

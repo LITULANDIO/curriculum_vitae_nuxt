@@ -57,7 +57,6 @@
     </div>
   </template>
   
-  // https://www.campusmvp.es/certificados/carles-far-pierres/4701
   <script setup>
   import { ref, onMounted, nextTick, computed } from 'vue';
   import { fileTree, experience, academy } from '../utils/constants';

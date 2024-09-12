@@ -1,6 +1,6 @@
 <template>
   <transition name="detail">
-    <div v-if="isVisible" class="relative w-full max-w-lg mx-auto p-6 shadow-md rounded-lg z-20 border border-solid top-[60px]" 
+    <div v-if="isVisible" class="relative w-full max-w-lg mx-auto p-6 shadow-md rounded-lg z-20 border border-solid top-[80px]" 
     :class="[isDarkTheme ? 'bg-black text-white border-white' : 'bg-white text-black border-black' ]">
     
       <button @click="$emit('close')" class="absolute top-2 right-2.5 text-lg font-bold focus:outline-none">
@@ -57,7 +57,7 @@
           </button>
         </div>
 
-        <div v-if="responseMessage" :class="{'text-red-500': responseMessage.includes('Failed'), 'text-green-500': responseMessage.includes('successfully')}" class="text-sm">
+        <div v-if="responseMessage" :class="{'text-red-500': responseMessage.includes('try again') || responseMessage.includes('Por favor') , 'text-green-500': responseMessage.includes('éxito') || responseMessage.includes('successfully') }" class="text-sm">
           {{ responseMessage }}
         </div>
       </form>

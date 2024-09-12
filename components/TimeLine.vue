@@ -62,7 +62,7 @@
   const emit = defineEmits(['selectEvent'])
   const currentIndex = ref(0);
   const itemWidth = 300;
-  const visibleItems = 2;
+  const visibleItems = process.client && window.innerWidth < 515 ? 1 : 2;
   const currentTranslate = computed(() => -currentIndex.value * itemWidth);
   const { isDarkTheme } = useTheme();
 
