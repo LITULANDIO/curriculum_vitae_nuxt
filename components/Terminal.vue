@@ -180,6 +180,8 @@
         sendEmiterShowTimelineAcademy()
         sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenContactForm()
+        outputLines.value.push('terminal.commands11');
+        hiddenInput.value.blur()
         break;
       case 'proyectos':
         window.open('https://github.com/LITULANDIO', '_blank');
