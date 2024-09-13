@@ -26,7 +26,7 @@
           <CardDetail 
             v-if="selectedExperience"
             class="absolute w-full"
-            :experience="selectedExperience"
+            :event="selectedExperience"
             @goBack="showTimeline"
           />
         </transition>
@@ -34,7 +34,7 @@
           <CardDetail 
             v-if="selectedAcademy"
             class="absolute w-full"
-            :experience="selectedAcademy"
+            :event="selectedAcademy"
             @goBack="showTimeline"
           />
         </transition>

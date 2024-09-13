@@ -3,7 +3,7 @@
     class="detail-container absolute font-mono text-xs md:text-base z-20"  
     :class="[isDarkTheme ? 'bg-black text-white border-[#ddd]' : 'bg-white text-black border-[#ddd]']"
     >
-    <h2 class="font-bold mb-1">{{ experience.text }}</h2>
+    <h2 class="font-bold mb-1">{{ event.text }}</h2>
     <p>{{ translateDescription}}</p>
     <button 
     class="back-arrow font-mono text-xs md:text-base transition-transform transform hover:scale-105 active:scale-95" @click="$emit('goBack')"
@@ -19,13 +19,13 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
 const props = defineProps({
-  experience: {
+  event: {
     type: Object,
     required: true
   }
 })
 const { isDarkTheme } = useTheme()
-const translateDescription = computed(() => t(props.experience.description))
+const translateDescription = computed(() => t(props.event.description))
 
 </script>
 

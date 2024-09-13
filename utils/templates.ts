@@ -1,7 +1,7 @@
 export const terminal = `
 <template>
-  <div ref="terminalPane" class="inset-0 flex items-center justify-center overflow-auto terminal-pane">
-    <div class="mx-auto w-full max-w-[600px]  px-[10px] h-auto absolute -z-10" style="top: 23rem;">
+  <div ref="terminalPane" class="inset-0 flex items-center justify-center">
+    <div ref="terminalContainer" class="mx-auto w-full max-w-[600px]  px-[10px] h-auto absolute z-10 terminal-container" @click="focusHiddenInput" @touch="focusHiddenInput">
       <div
         class="relative w-full rounded-[10px] flex flex-col overflow-hidden font-mono text-left bg-transparent h-[350px] md:h-[420px]"
         :class="[isDarkTheme ? 'text-white' : 'text-black', isDarkTheme ? 'shadow-shadow-white' : 'shadow-shadow-dark']">
@@ -72,8 +72,9 @@ export const terminal = `
   const editorInstance = ref(null);
   const { isDarkTheme } = useTheme();
   const { t, locale } = useI18n()
+  const terminalContainer = ref(null)
 
-  const emit = defineEmits(['showTimeLine'])
+  const emit = defineEmits(['showTimeLineExperience', 'showTimeLineAcademy', 'showFormContact'])
 
   const commands = computed(() => [
   t('terminal.commands1'),
@@ -130,17 +131,29 @@ export const terminal = `
     })
   })
 
-  const sendEmiterShowTimeLine = () => {
-    emit('showTimeLine', true)
+  const sendEmiterShowTimeLineExperience = () => {
+    emit('showTimeLineExperience', true)
   }
-  const sendEmiterHiddenTimeLine = () => {
-    emit('showTimeLine', false)
+  const sendEmiterHiddenTimeLineExperience = () => {
+    emit('showTimeLineExperience', false)
+  }
+  const sendEmiterShowContactForm = () => {
+    emit('showFormContact', true)
+  }
+  const sendEmiterHiddenContactForm = () => {
+    emit('showFormContact', false)
+  }
+  const sendEmiterShowTimelineAcademy = () => {
+    emit('showTimeLineAcademy', true)
+  }
+  const sendEmiterHiddenTimelineAcademy = () => {
+    emit('showTimeLineAcademy', false)
   }
 
   const downloadPDF = () => {
     const link = document.createElement('a');
     link.href = '/api/pdf';
-    link.download = 'curriculum_carles.pdf';
+    link.download = 'cv_litus.png';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -152,32 +165,53 @@ export const terminal = `
     }
     switch (input.toLowerCase()) {
       case 'ayuda': 
-        outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
-        sendEmiterHiddenTimeLine()
+        outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help7', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenContactForm()
+        sendEmiterHiddenTimelineAcademy()
         break;
       case 'experiencia':
-        sendEmiterShowTimeLine()
+        sendEmiterShowTimeLineExperience()
+        sendEmiterHiddenContactForm()
+        sendEmiterHiddenTimelineAcademy()
         outputLines.value.push('terminal.commands10');
+        hiddenInput.value.blur()
+        break;
+      case 'formacion': 
+        sendEmiterShowTimelineAcademy()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenContactForm()
+        outputLines.value.push('terminal.commands11');
+        hiddenInput.value.blur()
         break;
       case 'proyectos':
         window.open('https://github.com/LITULANDIO', '_blank');
         outputLines.value.push('terminal.commands8');
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenContactForm()
+        sendEmiterHiddenTimelineAcademy()
         break;
       case 'contacto':
-        // TODO
+        sendEmiterShowContactForm()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
+        hiddenInput.value.blur()
         break;
       case 'descargar_cv':
         downloadPDF()
         outputLines.value.push('terminal.commands9');
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenContactForm()
+        sendEmiterHiddenTimelineAcademy()
         break;
       case 'limpiar':
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenContactForm()
+        sendEmiterHiddenTimelineAcademy()
         outputLines.value = [];
         break;
       default:
-        outputLines.value.push($t'terminal.commands7', input);
+        outputLines.value.push($t('terminal.commands7', {input})});
     }
     scrollToBottom();
   };
@@ -188,33 +222,53 @@ export const terminal = `
     }
     switch (input.toLowerCase()) {
       case 'help':
-        outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
-        sendEmiterHiddenTimeLine()
+        outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help7', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
+        sendEmiterHiddenContactForm()
         break;
       case 'experience':
-        sendEmiterShowTimeLine()
+        sendEmiterShowTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
+        sendEmiterHiddenContactForm()
         outputLines.value.push('terminal.commands10');
+        hiddenInput.value.blur()
+        break;
+      case 'academy': 
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenContactForm()
+        outputLines.value.push('terminal.commands11');
+        hiddenInput.value.blur()
         break;
       case 'projects':
         window.open('https://github.com/LITULANDIO', '_blank');
         outputLines.value.push('terminal.commands8');
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
+        sendEmiterHiddenContactForm()
         break;
       case 'contact':
-        outputLines.value.push('TODO: link per veure un formuli de contacte');
-        sendEmiterHiddenTimeLine()
+        sendEmiterShowContactForm()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
+        hiddenInput.value.blur()
         break;
       case 'download_cv':
         downloadPDF()
         outputLines.value.push('terminal.commands9');
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
+        sendEmiterHiddenContactForm()
         break;
       case 'clear':
-        sendEmiterHiddenTimeLine()
+        sendEmiterHiddenTimeLineExperience()
+        sendEmiterHiddenTimelineAcademy()
+        sendEmiterHiddenContactForm()
         outputLines.value = [];
         break;
       default:
-        outputLines.value.push($t('terminal.commands7', input);
+        outputLines.value.push($t('terminal.commands7', {input})});
     }
     scrollToBottom();
   };
@@ -276,6 +330,7 @@ export const terminal = `
     const terminalPane = document.querySelector('.terminal-pane');
     if (terminalPane && terminalPane.contains(event.target)) {
       focusHiddenInput();
+      window.scrollTo(0, 50);
     }
   })
   }
@@ -288,11 +343,10 @@ const handleResize = () => {
 
   onMounted(() => {
     console.log(locale.value)
-    focusHiddenInput();
     typeCommand();
     blinkCursor();
-    window.addEventListener('touchstart', handleTouchStart)
-    window.addEventListener('keydown', handleKeyPress)
+    terminalContainer.value.addEventListener('touchstart', handleTouchStart)
+    terminalContainer.value.addEventListener('keydown', handleKeyPress)
     window.addEventListener('resize', handleResize)
   })
 
@@ -304,14 +358,17 @@ const handleResize = () => {
   </script>
   
   <style lang="postcss">
+
+  .terminal-container {
+    top: 20rem;
+    @media (max-width: 795px) {
+      top: 5rem;
+    }
+  }
    .terminal-minimized {
     @apply fixed bottom-0 right-0 w-1/3 h-20 transition-all duration-300 z-20;
   }
 
-  .terminal-pane {
-    @apply w-full h-full overflow-auto;
-  }
-  
   .terminal-minimized {
     @apply w-full h-20;
   }
@@ -534,35 +591,57 @@ export const codeEditor = `
 
 export const splitContainer = `
 <template>
-    <div class="h-screen flex px-2">
+    <div class="h-screen px-2 md:flex">
       <div class="flex flex-col terminal-pane">
         <transition  
           @before-enter="onBeforeEnter"
           @enter="onEnter"
           @leave="onLeave">
           <TimeLine 
-            v-show="isTimeLine && !selectedExperience"
-            :experience="events"
-            @selectExperience="onSelectExeperience"
+            v-show="isTimeLineExperience && !selectedExperience"
+            :events="experiences"
+            @selectEvent="onSelectExeperience"
             />
         </transition>
+        <transition  
+          @before-enter="onBeforeEnter"
+          @enter="onEnter"
+          @leave="onLeave">
+          <TimeLine 
+            v-show="isTimeLineAcademy && !selectedAcademy"
+            :events="academies"
+            @selectEvent="onSelectAcademy"
+            />
+        </transition>
+        <ContactForm :isVisible="isFormContact" @close="isFormContact = false"/>
         <transition name="detail">
           <CardDetail 
             v-if="selectedExperience"
             class="absolute w-full"
-            :experience="selectedExperience"
+            :event="selectedExperience"
             @goBack="showTimeline"
           />
         </transition>
-        <Terminal @showTimeLine="onShowTimeLine"/>
+        <transition name="detail">
+          <CardDetail 
+            v-if="selectedAcademy"
+            class="absolute w-full"
+            :event="selectedAcademy"
+            @goBack="showTimeline"
+          />
+        </transition>
+        <Terminal v-if="isDelayShowComponents" 
+          @showTimeLineExperience="onShowTimeLineExperience" 
+          @showTimeLineAcademy="onShowTimeLineAcademy"
+          @showFormContact="onShowFormContact"/>
       </div>
       <FileNode 
-          v-if="!isMobile"
+          v-if="!isMobile && isDelayShowComponents"
           :nodes="tree" 
           :selectedFileId="selectedFileId"
           @selectNode="loadFileContent" />
       <CodeEditor 
-        v-if="!isMobile"
+        v-if="!isMobile && isDelayShowComponents"
         class="editor-container" 
         :currentCode="code"
         :currentFile="currentFile"
@@ -572,20 +651,25 @@ export const splitContainer = `
   
   <script setup>
   import { ref, onMounted, nextTick, computed } from 'vue';
-  import { fileTree, experience } from '../utils/constants';
-  import { terminal, particles, fileNode, codeEditor, splitContainer } from '../utils/templates';
+  import { fileTree, experience, academy } from '../utils/constants';
+  import { terminal, particles, fileNode, codeEditor, splitContainer, timeLine, cardDetail, app } from '../utils/templates';
   import Split from 'split.js';
   import TimeLine from '../components/TimeLine.vue'
   
-  const splitInstance = ref(null);
-  const currentFile = ref(null);
-  const selectedFileId = ref(null);
+  const splitInstance = ref(null)
+  const currentFile = ref(null)
+  const selectedFileId = ref(null)
   const tree = ref(fileTree)
   const code = ref('')
-  const isTimeLine = ref(false)
-  const isMobile = computed(() => process.client && window.innerWidth <= 764)
-  const events = ref(experience)
-  const selectedExperience = ref(null);
+  const isTimeLineExperience = ref(false)
+  const isTimeLineAcademy = ref(false)
+  const isFormContact = ref(false)
+  const isMobile = computed(() => process.client && window.innerWidth < 515)
+  const experiences = ref(experience)
+  const academies = ref(academy)
+  const selectedExperience = ref(null)
+  const selectedAcademy = ref(null)
+  const isDelayShowComponents = ref(false)
 
   
   const updateSplit = () => {
@@ -604,16 +688,26 @@ export const splitContainer = `
     }
   };
 
-  const onShowTimeLine = (value) => {
-    isTimeLine.value = value
+  const onShowTimeLineExperience = (value) => {
+    isTimeLineExperience.value = value
+  }
+  const onShowTimeLineAcademy = (value) => {
+    isTimeLineAcademy.value = value
+  }
+  const onShowFormContact = (value) => {
+    console.log({value})
+    isFormContact.value = value
   }
   const onSelectExeperience = (experience) => {
       selectedExperience.value = experience;
-  };
-
+  }
+  const onSelectAcademy = (academy) => {
+    selectedAcademy.value = academy
+  }
   const showTimeline = () => {
-  selectedExperience.value = null;
-};
+    selectedExperience.value = null
+    selectedAcademy.value = null
+  }
   
   const resetSplit = () => {
     const terminalPane = document.querySelector('.terminal-pane');
@@ -638,11 +732,14 @@ export const splitContainer = `
       'Particles.vue': particles,
       'FileNode.vue': fileNode,
       'CodeEditor.vue': codeEditor,
-      'SplitContainer.vue': splitContainer
+      'SplitContainer.vue': splitContainer,
+      'TimeLine.vue': timeLine,
+      'CardDetail.vue': cardDetail,
+      'app.vue': app
     }[file.label] || '';
   
     code.value = fileContent;
-    currentFile.value = file.label;
+    currentFile.value = file.label || app;
   
     nextTick(() => {
       resetSplit();
@@ -650,16 +747,15 @@ export const splitContainer = `
   };
   
   const initializeDefaultFile = () => {
-    if (selectedFileId.value === null) {
-      const defaultFile = tree.value[0].children.find(child => 
-        ['Terminal.vue', 'Particles.vue', 'FileNode.vue', 'CodeEditor.vue', 'SplitContainer.vue'].includes(child.label)
-      );
-      if (defaultFile) {
-        selectedFileId.value = defaultFile.id
-        loadFileContent(defaultFile);
-      }
+  if (selectedFileId.value === null) {
+    const defaultFile = tree.value[0].children.find(child => child.label === 'app.vue');
+    
+    if (defaultFile) {
+      selectedFileId.value = defaultFile.id;
+      loadFileContent(defaultFile);
     }
-  };
+  }
+};
   
   const onUpdateCode = (newCode) => {
     code.value = newCode;
@@ -690,8 +786,9 @@ const onLeave = (el, done) => {
 
   
   onMounted(() => {
-    initializeDefaultFile();
     nextTick(() => {
+      isDelayShowComponents.value = true
+      initializeDefaultFile();
       updateSplit();
     });
     window.addEventListener('resize', () => {
@@ -730,12 +827,13 @@ const onLeave = (el, done) => {
     opacity: 1;
     transform: translateY(0) scale(1); /* Termina en su posición normal con zoom normal */
   }
-  </style>  
+  </style>
+  
 `
 
 export const timeLine = `
 <template>
-    <div class="timeline-wrap">
+    <div class="timeline-wrap z-0">
       <button
         class="timeline-nav-button timeline-nav-button--prev transition-transform transform hover:scale-105 active:scale-95"
         @click="prev"
@@ -745,9 +843,9 @@ export const timeLine = `
       </button>
   
       <div class="timeline">
-        <div class="timeline-items" :style="{ transform: translateX({currentTranslate}px), height: '300px' }">
+        <div class="timeline-items" :style="{ transform: translateX($currentTranslatepx), height: '300px' }">
           <div 
-            v-for="(event, index) in experience" 
+            v-for="(event, index) in events" 
             :key="index" 
             class="timeline-item"
             :class="{ 'timeline-item--bottom': index % 2 !== 0 }"
@@ -770,7 +868,7 @@ export const timeLine = `
             v-for="(event, index) in experience" 
             :key="'point-' + index" 
             class="timeline-point"
-            :style="{ left: {index * itemWidth + itemWidth / 2}px }"
+            :style="{ left: $index * itemWidth + itemWidth / 2}px}"
           ></div>
         </div>
       </div>
@@ -790,19 +888,19 @@ export const timeLine = `
   import { useTheme } from '~/composables/useTheme';
 
   const props = defineProps({
-    experience: {
+    events: {
         type: Array,
         default: [{ year: '', text: '' }]
     }
   })
-  const emit = defineEmits(['selectExperience'])
+  const emit = defineEmits(['selectEvent'])
   const currentIndex = ref(0);
   const itemWidth = 300;
-  const visibleItems = 2;
+  const visibleItems = process.client && window.innerWidth < 515 ? 1 : 2;
   const currentTranslate = computed(() => -currentIndex.value * itemWidth);
   const { isDarkTheme } = useTheme();
 
-  const onSelectExperience = (event) => emit('selectExperience', event)
+  const onSelectExperience = (event) => emit('selectEvent', event)
   
   const prev = () => {
     if (currentIndex.value > 0) {
@@ -811,7 +909,7 @@ export const timeLine = `
   }
   
   const next = () => {
-    if (currentIndex.value < props.experience.length - visibleItems) {
+    if (currentIndex.value < props.events.length - visibleItems) {
       currentIndex.value++;
     }
   }
@@ -825,13 +923,12 @@ export const timeLine = `
     padding: 20px;
     width: 60%;
     position: absolute;
-    top: 20px;
     left: 10%;
     transform: translate(-20%, -20%);
     z-index: 2;
     @media (max-width: 795px) {
       width: 100%;
-      top: 50px;
+      top: 26rem;
       left: 0%;
       padding: 10px;
     }
@@ -990,7 +1087,7 @@ export const cardDetail = `
     class="detail-container absolute font-mono text-xs md:text-base"  
     :class="[isDarkTheme ? 'bg-black text-white border-[#ddd]' : 'bg-white text-black border-[#ddd]']"
     style="top: 100px">
-    <h2 class="font-bold mb-1">{{ experience.text }}</h2>
+    <h2 class="font-bold mb-1">{{ event.text }}</h2>
     <p>{{ translateDescription}}</p>
     <button 
     class="back-arrow font-mono text-xs md:text-base transition-transform transform hover:scale-105 active:scale-95" @click="$emit('goBack')"
@@ -1006,13 +1103,13 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
 const props = defineProps({
-  experience: {
+  event: {
     type: Object,
     required: true
   }
 })
 const { isDarkTheme } = useTheme()
-const translateDescription = computed(() => t(props.experience.description))
+const translateDescription = computed(() => t(props.event.description))
 
 </script>
 
