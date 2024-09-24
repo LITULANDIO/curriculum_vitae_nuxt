@@ -20,7 +20,10 @@
             class="timeline-content font-mono text-xs md:text-base" 
             :class="[isDarkTheme ? 'bg-black text-white dark-theme' : 'bg-white text-black']"
             @click="onSelectExperience(event)">
+            <div class="flex justify-between">
               <h2 class="font-bold">{{ event.year }}</h2>
+              <img :src="isDarkTheme ? '/assets/eye_white.png': '/assets/eye_black.png'" width="25" height="25"/>
+            </div>
               <div class="flex items-center">
                   <img :src="event.img" class="w-10 h-10"/>
                   <p class="ml-2">{{ event.text }}</p>
