@@ -152,7 +152,7 @@
   const downloadPDF = () => {
     const link = document.createElement('a');
     link.href = '/api/pdf';
-    link.download = 'cv_litus.png';
+    link.download = 'cv_carlesfar.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -191,7 +191,8 @@
         sendEmiterHiddenTimelineAcademy()
         break;
       case 'contacto':
-        sendEmiterShowContactForm()
+        window.location.href='mailto:contacto@carlesfar.com'
+        // sendEmiterShowContactForm()
         sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenTimelineAcademy()
         hiddenInput.value.blur()
@@ -234,7 +235,7 @@
         hiddenInput.value.blur()
         break;
       case 'academy': 
-        sendEmiterHiddenTimeLineExperience()
+        sendEmiterShowTimelineAcademy()
         sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenContactForm()
         outputLines.value.push('terminal.commands11');
@@ -248,7 +249,8 @@
         sendEmiterHiddenContactForm()
         break;
       case 'contact':
-        sendEmiterShowContactForm()
+        window.location.href='mailto:contacto@carlesfar.com'
+        // sendEmiterShowContactForm()
         sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenTimelineAcademy()
         hiddenInput.value.blur()

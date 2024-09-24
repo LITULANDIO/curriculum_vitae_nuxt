@@ -27,9 +27,9 @@ export const experience = [
     {title: 'TITULO', description: 'card-detail.azertium', year: '2021-actually', img: '/assets/azertium_it.png', text: 'AZERTIUM IT'},
     {title: 'TITULO', description: 'card-detail.t2client', year: '2020-21', img: '/assets/t2client.png', text: 'T2CLIENT'},
     {title: 'TITULO', description: 'card-detail.coneptum', year: '2020-20', img: '/assets/coneptum.png', text: 'CONEPTUM AI'},
-    {title: 'TITULO', description: 'card-detail.casals-online', year: '2017-19', img: '/assets/casals_online.png', text: 'CASALS ONLINE'},
-    {title: 'TITULO', description: 'card-detail.pinturasfar', year: '2004-16', img: '/assets/pinturas_far.png', text: 'PINTURAS FAR'},
+    {title: 'TITULO', description: 'card-detail.casals-online', year: '2017-19', img: '/assets/casals_online.png', text: 'CASALS ONLINE'}
   ]
+  // {title: 'TITULO', description: 'card-detail.pinturasfar', year: '2004-16', img: '/assets/pinturas_far.png', text: 'PINTURAS FAR'},
 
 export const academy = [
   {description: 'card-detail.campus', text: 'CAMPUS MVP', year: '2019-20', img: '/assets/campusmvp.png', link: 'https://www.campusmvp.es/certificados/carles-far-pierres/4701'},

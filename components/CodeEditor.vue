@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-1 flex flex-col">
+    <div class="flex-1 flex flex-col z-10">
       <MonacoEditor
         v-if="currentFile && localCode"
         class="flex-1 bg-[#2d2d2d] text-white"
