@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="detail-container relative p-5 md:w-[70%] mx-auto rounded-[15px] border border-solid top-[-10rem] md:top-[20rem] w-full font-mono text-xs md:text-base z-20"  
+    class="detail-container relative p-5 md:w-[70%] mx-auto rounded-[15px] border border-solid md:top-[5rem] top-[20rem] w-full font-mono text-xs md:text-base z-20"  
     :class="[isDarkTheme ? 'bg-black text-white border-[#ddd]' : 'bg-white text-black border-[#ddd]']"
   >
     <h2 class="font-bold mb-1">{{ event.text }}</h2>
