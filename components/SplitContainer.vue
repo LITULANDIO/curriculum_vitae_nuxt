@@ -44,6 +44,7 @@
           :visible="isShowTooltip"
           :isBlinkToolTip="isBlinkToolTip"
           :blink="blinkToolTip"
+          @onClicked="onHiddenToolTip"
         />
         <Terminal v-if="isDelayShowComponents" 
           ref="refTerminal"
@@ -138,6 +139,11 @@
     isBlinkToolTip.value = !isBlinkToolTip.value;
     setTimeout(blinkToolTip, 500);
   };
+
+  const onHiddenToolTip = () => {
+    isShowTooltip.value = false
+    isBlinkToolTip.value = false
+  }
   
 
   const resetSplit = () => {

@@ -9,7 +9,8 @@
     >
     <div v-if="visible" class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 group-hover:block z-50" 
     :class="[isBlinkToolTip ? 'opacity-100' : 'opacity-0']"
-    :style="{ top: styleTop, left: styleLeft }" >
+    :style="{ top: styleTop, left: styleLeft }"
+    @click="onClicked" >
     <div class="relative bg-gray-700 text-white text-sm rounded py-2 px-3">
      {{ text }}
       <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-t-8 border-t-gray-700 border-x-8 border-x-transparent"></div>
@@ -19,10 +20,10 @@
 </template>
 
 <script setup>
-import { ref, defineProps, onMounted, nextTick, computed } from 'vue'
+import { ref, defineProps, defineEmits, onMounted, nextTick, computed } from 'vue'
 const styleTop = ref('0')
 const styleLeft = ref('0')
-
+defineEmits(['onClicked'])
 const props = defineProps({
     text: String,
     visible: Boolean,
