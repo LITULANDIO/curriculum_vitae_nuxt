@@ -9,7 +9,7 @@
     >
     <div v-if="visible" class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 group-hover:block z-50" 
     :class="[isBlinkToolTip ? 'opacity-100' : 'opacity-0']"
-    :style="{ top: styleTop, left: styleLeft }"
+    :style="{ top: styleTop, left: styleLeft, width: isMobile ? '150px': 'auto' }"
     @click="onClicked" >
     <div class="relative bg-gray-700 text-white text-sm rounded py-2 px-3">
      {{ text }}
@@ -44,7 +44,7 @@ onMounted(() => {
             `${String(props.elementTop.getBoundingClientRect().top.toFixed(0) -10)}px`
             
             styleLeft.value = isMobile.value ? 
-            `${String(props.elementTop.getBoundingClientRect().right.toFixed(0) -45)}px` :
+            `${String(props.elementTop.getBoundingClientRect().right.toFixed(0) -65)}px` :
             `${String(props.elementTop.getBoundingClientRect().right.toFixed(0) -20)}px`
         }
     })
