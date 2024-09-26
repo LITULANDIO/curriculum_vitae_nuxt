@@ -7,7 +7,7 @@ export const fileTree = [
         {
           id: 2,
           label: 'components',
-          open: true,
+          open: false,
           children: [
             { id: 3, label: 'Terminal.vue', type: 'file' },
             { id: 4, label: 'Particles.vue', type: 'file' },

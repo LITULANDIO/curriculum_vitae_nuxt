@@ -259,12 +259,12 @@ const onLeave = (el, done) => {
   
   .detail-enter-from, .detail-leave-to {
     opacity: 0;
-    transform: translateY(50px) scale(0.8); /* Empieza desde abajo y con zoom reducido */
+    transform: translateY(50px) scale(0.8);
   }
   
   .detail-enter-to, .detail-leave-from {
     opacity: 1;
-    transform: translateY(0) scale(1); /* Termina en su posición normal con zoom normal */
+    transform: translateY(0) scale(1);
   }
   </style>
   

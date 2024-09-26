@@ -26,7 +26,7 @@
           :class="[isDarkTheme ? 'bg-black' : 'bg-white']"
           >
         </div>
-        <div ref="outputRef" class="relative z-20 flex-1 overflow-y-auto p-2.5 whitespace-pre-wrap pb-2.5 text-xs md:text-base max-h-[350px]"> <!-- Control de tamaño de fuente y altura máxima -->
+        <div ref="outputRef" class="relative z-20 flex-1 overflow-y-auto p-2.5 whitespace-pre-wrap pb-2.5 text-xs md:text-base max-h-[350px]">
           <div v-for="(line, index) in translatedOutputLines" :key="index">
             <span>{{ line }}</span>
           </div>

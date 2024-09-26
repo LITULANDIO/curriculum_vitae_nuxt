@@ -27,7 +27,7 @@ export const terminal = `
           :class="[isDarkTheme ? 'bg-black' : 'bg-white']"
           >
         </div>
-        <div ref="outputRef" class="relative z-20 flex-1 overflow-y-auto p-2.5 whitespace-pre-wrap pb-2.5 text-xs md:text-base max-h-[350px]"> <!-- Control de tamaño de fuente y altura máxima -->
+        <div ref="outputRef" class="relative z-20 flex-1 overflow-y-auto p-2.5 whitespace-pre-wrap pb-2.5 text-xs md:text-base max-h-[350px]">
           <div v-for="(line, index) in translatedOutputLines" :key="index">
             <span>{{ line }}</span>
           </div>
@@ -862,12 +862,12 @@ const onLeave = (el, done) => {
   
   .detail-enter-from, .detail-leave-to {
     opacity: 0;
-    transform: translateY(50px) scale(0.8); /* Empieza desde abajo y con zoom reducido */
+    transform: translateY(50px) scale(0.8);
   }
   
   .detail-enter-to, .detail-leave-from {
     opacity: 1;
-    transform: translateY(0) scale(1); /* Termina en su posición normal con zoom normal */
+    transform: translateY(0) scale(1);
   }
   </style>
 `
