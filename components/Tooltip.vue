@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, nextTick } from 'vue'
+import { ref, defineProps, onMounted, nextTick, computed } from 'vue'
 const styleTop = ref('0')
 const styleLeft = ref('0')
 
@@ -31,12 +31,20 @@ const props = defineProps({
     blink: Function
 })
 
+const isMobile = computed(() => process.client && window.innerWidth < 515)
+
+
 onMounted(() => {
     props.blink()
     nextTick(() => {
         if (props.elementTop) {
-            styleTop.value = `${String(props.elementTop.getBoundingClientRect().top.toFixed(0) -10)}px`
-            styleLeft.value = `${String(props.elementTop.getBoundingClientRect().right.toFixed(0) -10)}px`
+            styleTop.value = isMobile.value ? 
+            `${String(props.elementTop.getBoundingClientRect().top.toFixed(0) -15)}px` :
+            `${String(props.elementTop.getBoundingClientRect().top.toFixed(0) -10)}px`
+            
+            styleLeft.value = isMobile.value ? 
+            `${String(props.elementTop.getBoundingClientRect().right.toFixed(0) -20)}px` :
+            `${String(props.elementTop.getBoundingClientRect().top.toFixed(0) -10)}px`
         }
     })
 })
