@@ -41,6 +41,9 @@
       "error1": "No se ha podido enviar el mensaje. Por favor, inténtalo de nuevo.",
       "error2": "Se ha producido un error. Por favor, inténtelo de nuevo.",
       "ok": "¡Mensaje enviado con éxito!"
+    },
+    "tooltip": {
+      "text": "CLICK AQUI"
     }
   }
   

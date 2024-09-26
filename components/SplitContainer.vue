@@ -38,10 +38,19 @@
             @goBack="showTimeline"
           />
         </transition>
+        <Tooltip  v-if="isDelayShowComponents" 
+          :text="$t('tooltip.text')" 
+          :elementTop="elementTop" 
+          :visible="isShowTooltip"
+          :isBlinkToolTip="isBlinkToolTip"
+          :blink="blinkToolTip"
+        />
         <Terminal v-if="isDelayShowComponents" 
+          ref="refTerminal"
           @showTimeLineExperience="onShowTimeLineExperience" 
           @showTimeLineAcademy="onShowTimeLineAcademy"
-          @showFormContact="onShowFormContact"/>
+          @showFormContact="onShowFormContact"
+          @showTooltip="onShowTooltip"/>
       </div>
       <FileNode 
           v-if="!isMobile && isDelayShowComponents"
@@ -61,9 +70,12 @@
   import { ref, onMounted, nextTick, computed } from 'vue';
   import { fileTree, experience, academy } from '../utils/constants';
   import { terminal, particles, fileNode, codeEditor, splitContainer, timeLine, cardDetail, app } from '../utils/templates';
+  import { useI18n } from 'vue-i18n'
   import Split from 'split.js';
   import TimeLine from '../components/TimeLine.vue'
+  import Tooltip  from '~/components/Tooltip.vue';
   
+  const { t } = useI18n()
   const splitInstance = ref(null)
   const currentFile = ref(null)
   const selectedFileId = ref(null)
@@ -78,7 +90,10 @@
   const selectedExperience = ref(null)
   const selectedAcademy = ref(null)
   const isDelayShowComponents = ref(false)
-
+  const isShowTooltip = ref(false)
+  const isBlinkToolTip = ref(false)
+  const refTerminal = ref(null)
+  const elementTop = ref(null)
   
   const updateSplit = () => {
     const terminalPane = document.querySelector('.terminal-pane');
@@ -116,7 +131,15 @@
     selectedExperience.value = null
     selectedAcademy.value = null
   }
+  const onShowTooltip = (value) => {
+    isShowTooltip.value = value
+  }
+  const blinkToolTip = () => {
+    isBlinkToolTip.value = !isBlinkToolTip.value;
+    setTimeout(blinkToolTip, 500);
+  };
   
+
   const resetSplit = () => {
     const terminalPane = document.querySelector('.terminal-pane');
     const editorContainer = document.querySelector('.editor-container');
@@ -205,6 +228,13 @@ const onLeave = (el, done) => {
       }
     });
   });
+
+  onUpdated(() => {
+    if (isDelayShowComponents.value) {
+      elementTop.value = refTerminal.value.inputField
+    }
+  })
+
   </script>
   
   <style lang="postcss">

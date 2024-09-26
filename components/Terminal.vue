@@ -31,7 +31,7 @@
             <span>{{ line }}</span>
           </div>
         </div>
-        <div class="relative z-20 flex items-center p-2.5 text-xs md:text-base">
+        <div ref="inputField" class="relative z-20 flex items-center p-2.5 text-xs md:text-base field">
           <span class="text-[#00ff00] mr-1.5">$ </span>
           <input
             ref="hiddenInput"
@@ -56,7 +56,7 @@
 </template>
   
   <script setup>
-  import { ref, onMounted, nextTick, onBeforeUnmount, defineEmits } from 'vue';
+  import { ref, onMounted, nextTick, onBeforeUnmount, defineEmits, defineExpose, provide } from 'vue';
   import { useTheme } from '~/composables/useTheme';
   import { useI18n } from 'vue-i18n'
 
@@ -72,9 +72,9 @@
   const { isDarkTheme } = useTheme();
   const { t, locale } = useI18n()
   const terminalContainer = ref(null)
+  const inputField = ref(null)
 
-  const emit = defineEmits(['showTimeLineExperience', 'showTimeLineAcademy', 'showFormContact'])
-
+  const emit = defineEmits(['showTimeLineExperience', 'showTimeLineAcademy', 'showFormContact', 'showTooltip'])
   const commands = computed(() => [
   t('terminal.commands1'),
   t('terminal.commands2'),
@@ -108,6 +108,7 @@
       outputLines.value.push('terminal.commands5');
       outputLines.value.push('terminal.commands6');
       isUserInputEnabled.value = true;
+      emit('showTooltip', true)
     }
     scrollToBottom();
   };
@@ -147,6 +148,9 @@
   }
   const sendEmiterHiddenTimelineAcademy = () => {
     emit('showTimeLineAcademy', false)
+  }
+  const showTooltip = () => {
+    emit('showTooltip', false)
   }
 
   const downloadPDF = () => {
@@ -313,6 +317,7 @@
   const focusHiddenInput = () => {
     if (hiddenInput.value) {
       hiddenInput.value.focus();
+      showTooltip()
     }
   };
   
@@ -341,6 +346,7 @@ const handleResize = () => {
     scrollToBottom()
   }, 300)
 }
+defineExpose({ inputField })
 
   onMounted(() => {
     console.log(locale.value)
@@ -353,8 +359,11 @@ const handleResize = () => {
 
   onBeforeUnmount(() => {
     if (editorInstance.value) {
-      editorInstance.value.dispose();
+      editorInstance.value.dispose()
     }
+    window.removeEventListener('touchstart', handleTouchStart)
+    window.removeEventListener('keydown', handleKeyPress)
+    window.removeEventListener('resize', handleResize)
   })
   </script>
   
