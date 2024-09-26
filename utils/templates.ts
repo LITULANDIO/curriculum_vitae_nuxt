@@ -153,7 +153,7 @@ export const terminal = `
   const downloadPDF = () => {
     const link = document.createElement('a');
     link.href = '/api/pdf';
-    link.download = 'cv_litus.png';
+    link.download = 'cv_carlesfar.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -192,7 +192,8 @@ export const terminal = `
         sendEmiterHiddenTimelineAcademy()
         break;
       case 'contacto':
-        sendEmiterShowContactForm()
+        window.location.href='mailto:contacto@carlesfar.com'
+        // sendEmiterShowContactForm()
         sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenTimelineAcademy()
         hiddenInput.value.blur()
@@ -211,7 +212,7 @@ export const terminal = `
         outputLines.value = [];
         break;
       default:
-        outputLines.value.push($t('terminal.commands7', {input})});
+        outputLines.value.push({t('terminal.commands7', {input})});
     }
     scrollToBottom();
   };
@@ -235,7 +236,7 @@ export const terminal = `
         hiddenInput.value.blur()
         break;
       case 'academy': 
-        sendEmiterHiddenTimeLineExperience()
+        sendEmiterShowTimelineAcademy()
         sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenContactForm()
         outputLines.value.push('terminal.commands11');
@@ -249,7 +250,8 @@ export const terminal = `
         sendEmiterHiddenContactForm()
         break;
       case 'contact':
-        sendEmiterShowContactForm()
+        window.location.href='mailto:contacto@carlesfar.com'
+        // sendEmiterShowContactForm()
         sendEmiterHiddenTimeLineExperience()
         sendEmiterHiddenTimelineAcademy()
         hiddenInput.value.blur()
@@ -268,7 +270,7 @@ export const terminal = `
         outputLines.value = [];
         break;
       default:
-        outputLines.value.push($t('terminal.commands7', {input})});
+        outputLines.value.push({t('terminal.commands7', {input})});
     }
     scrollToBottom();
   };
@@ -1084,15 +1086,18 @@ export const timeLine = `
 export const cardDetail = `
 <template>
   <div 
-    class="detail-container absolute font-mono text-xs md:text-base"  
+    class="detail-container relative p-5 md:w-[70%] mx-auto rounded-[15px] border border-solid top-[-10rem] md:top-[20rem] w-full font-mono text-xs md:text-base z-20"  
     :class="[isDarkTheme ? 'bg-black text-white border-[#ddd]' : 'bg-white text-black border-[#ddd]']"
-    style="top: 100px">
+  >
     <h2 class="font-bold mb-1">{{ event.text }}</h2>
-    <p>{{ translateDescription}}</p>
+    <p>{{ translateDescription }}</p>
     <button 
-    class="back-arrow font-mono text-xs md:text-base transition-transform transform hover:scale-105 active:scale-95" @click="$emit('goBack')"
-    :class="[isDarkTheme ? 'bg-white text-black' : 'bg-black text-white']"
-    >{{ $t('card-detail.back') }}</button>
+      class="back-arrow mt-5 p-2 rounded cursor-pointer font-mono text-xs md:text-base transition-transform transform hover:scale-105 active:scale-95"
+      @click="$emit('goBack')"
+      :class="[isDarkTheme ? 'bg-white text-black' : 'bg-black text-white']"
+    >
+      {{ $t('card-detail.back') }}
+    </button>
   </div>
 </template>
 
@@ -1112,28 +1117,6 @@ const { isDarkTheme } = useTheme()
 const translateDescription = computed(() => t(props.event.description))
 
 </script>
-
-<style scoped>
-.detail-container {
-  position: relative;
-  padding: 20px;
-  width: 70%;
-  margin: auto;
-  padding: 15px;
-  border-radius: 15px;
-  border: 1px solid;
-  @media (max-width: 795px) {
-      width: 100%;
-    }
-}
-
-.back-arrow {
-  margin-top: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-</style>
 `
 
 export const app = `

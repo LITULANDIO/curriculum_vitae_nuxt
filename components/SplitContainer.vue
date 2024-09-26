@@ -88,7 +88,7 @@
         splitInstance.value.destroy();
       }
       splitInstance.value = Split([terminalPane, editorContainer], {
-        sizes: [85, 15],
+        sizes: [90, 10],
         minSize: [100, 100],
         gutterAlign: 'center',
         gutterSize: 10,
@@ -125,7 +125,7 @@
         splitInstance.value.destroy();
       }
       splitInstance.value = Split([terminalPane, editorContainer], {
-        sizes: [60, 40],
+        sizes: [70, 30],
         minSize: [100, 100],
         gutterAlign: 'center',
         gutterSize: 10,

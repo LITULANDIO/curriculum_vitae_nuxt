@@ -1,14 +1,17 @@
 <template>
   <div 
-    class="detail-container absolute font-mono text-xs md:text-base z-20"  
+    class="detail-container relative p-5 md:w-[70%] mx-auto rounded-[15px] border border-solid top-[-10rem] md:top-[20rem] w-full font-mono text-xs md:text-base z-20"  
     :class="[isDarkTheme ? 'bg-black text-white border-[#ddd]' : 'bg-white text-black border-[#ddd]']"
-    >
+  >
     <h2 class="font-bold mb-1">{{ event.text }}</h2>
-    <p>{{ translateDescription}}</p>
+    <p>{{ translateDescription }}</p>
     <button 
-    class="back-arrow font-mono text-xs md:text-base transition-transform transform hover:scale-105 active:scale-95" @click="$emit('goBack')"
-    :class="[isDarkTheme ? 'bg-white text-black' : 'bg-black text-white']"
-    >{{ $t('card-detail.back') }}</button>
+      class="back-arrow mt-5 p-2 rounded cursor-pointer font-mono text-xs md:text-base transition-transform transform hover:scale-105 active:scale-95"
+      @click="$emit('goBack')"
+      :class="[isDarkTheme ? 'bg-white text-black' : 'bg-black text-white']"
+    >
+      {{ $t('card-detail.back') }}
+    </button>
   </div>
 </template>
 
@@ -28,27 +31,3 @@ const { isDarkTheme } = useTheme()
 const translateDescription = computed(() => t(props.event.description))
 
 </script>
-
-<style scoped>
-.detail-container {
-  position: relative;
-  padding: 20px;
-  width: 70%;
-  margin: auto;
-  padding: 15px;
-  border-radius: 15px;
-  border: 1px solid;
-  top: -15rem;
-  @media (max-width: 795px) {
-      width: 100%;
-      top: 20rem;
-    }
-}
-
-.back-arrow {
-  margin-top: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-</style>
