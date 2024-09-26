@@ -39,12 +39,12 @@ onMounted(() => {
     nextTick(() => {
         if (props.elementTop) {
             styleTop.value = isMobile.value ? 
-            `${String(props.elementTop.getBoundingClientRect().top.toFixed(0) -50)}px` :
+            `${String(props.elementTop.getBoundingClientRect().top.toFixed(0) -30)}px` :
             `${String(props.elementTop.getBoundingClientRect().top.toFixed(0) -10)}px`
             
             styleLeft.value = isMobile.value ? 
-            `${String(props.elementTop.getBoundingClientRect().right.toFixed(0) -20)}px` :
-            `${String(props.elementTop.getBoundingClientRect().top.toFixed(0) -50)}px`
+            `${String(props.elementTop.getBoundingClientRect().right.toFixed(0) -45)}px` :
+            `${String(props.elementTop.getBoundingClientRect().right.toFixed(0) -20)}px`
         }
     })
 })
