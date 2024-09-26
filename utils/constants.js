@@ -15,10 +15,11 @@ export const fileTree = [
             { id: 6, label: 'CodeEditor.vue', type: 'file' },
             { id: 7, label: 'SplitContainer.vue', type: 'file' },
             { id: 8, label: 'TimeLine.vue', type: 'file'},
-            { id: 9, label: 'CardDetail.vue', type: 'file'}
+            { id: 9, label: 'CardDetail.vue', type: 'file'},
+            { id: 10, label: 'ToolTip.vue', type: 'file' }
           ]
         },
-        { id: 10, label: 'app.vue', type: 'file' }, 
+        { id: 11, label: 'app.vue', type: 'file' }, 
       ]
     }
   ];

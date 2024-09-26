@@ -26,7 +26,7 @@ const styleLeft = ref('0')
 const props = defineProps({
     text: String,
     visible: Boolean,
-    elementTop: String,
+    elementTop: Object,
     isBlinkToolTip: Boolean,
     blink: Function
 })

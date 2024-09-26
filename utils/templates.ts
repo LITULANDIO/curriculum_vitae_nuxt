@@ -32,7 +32,7 @@ export const terminal = `
             <span>{{ line }}</span>
           </div>
         </div>
-        <div class="relative z-20 flex items-center p-2.5 text-xs md:text-base">
+        <div ref="inputField" class="relative z-20 flex items-center p-2.5 text-xs md:text-base field">
           <span class="text-[#00ff00] mr-1.5">$ </span>
           <input
             ref="hiddenInput"
@@ -57,7 +57,7 @@ export const terminal = `
 </template>
   
   <script setup>
-  import { ref, onMounted, nextTick, onBeforeUnmount, defineEmits } from 'vue';
+  import { ref, onMounted, nextTick, onBeforeUnmount, defineEmits, defineExpose, provide } from 'vue';
   import { useTheme } from '~/composables/useTheme';
   import { useI18n } from 'vue-i18n'
 
@@ -73,9 +73,9 @@ export const terminal = `
   const { isDarkTheme } = useTheme();
   const { t, locale } = useI18n()
   const terminalContainer = ref(null)
+  const inputField = ref(null)
 
-  const emit = defineEmits(['showTimeLineExperience', 'showTimeLineAcademy', 'showFormContact'])
-
+  const emit = defineEmits(['showTimeLineExperience', 'showTimeLineAcademy', 'showFormContact', 'showTooltip'])
   const commands = computed(() => [
   t('terminal.commands1'),
   t('terminal.commands2'),
@@ -109,6 +109,7 @@ export const terminal = `
       outputLines.value.push('terminal.commands5');
       outputLines.value.push('terminal.commands6');
       isUserInputEnabled.value = true;
+      emit('showTooltip', true)
     }
     scrollToBottom();
   };
@@ -148,6 +149,9 @@ export const terminal = `
   }
   const sendEmiterHiddenTimelineAcademy = () => {
     emit('showTimeLineAcademy', false)
+  }
+  const showTooltip = () => {
+    emit('showTooltip', false)
   }
 
   const downloadPDF = () => {
@@ -314,6 +318,7 @@ export const terminal = `
   const focusHiddenInput = () => {
     if (hiddenInput.value) {
       hiddenInput.value.focus();
+      showTooltip()
     }
   };
   
@@ -342,6 +347,7 @@ const handleResize = () => {
     scrollToBottom()
   }, 300)
 }
+defineExpose({ inputField })
 
   onMounted(() => {
     console.log(locale.value)
@@ -354,8 +360,11 @@ const handleResize = () => {
 
   onBeforeUnmount(() => {
     if (editorInstance.value) {
-      editorInstance.value.dispose();
+      editorInstance.value.dispose()
     }
+    window.removeEventListener('touchstart', handleTouchStart)
+    window.removeEventListener('keydown', handleKeyPress)
+    window.removeEventListener('resize', handleResize)
   })
   </script>
   
@@ -632,10 +641,19 @@ export const splitContainer = `
             @goBack="showTimeline"
           />
         </transition>
+        <Tooltip  v-if="isDelayShowComponents" 
+          :text="$t('tooltip.text')" 
+          :elementTop="elementTop" 
+          :visible="isShowTooltip"
+          :isBlinkToolTip="isBlinkToolTip"
+          :blink="blinkToolTip"
+        />
         <Terminal v-if="isDelayShowComponents" 
+          ref="refTerminal"
           @showTimeLineExperience="onShowTimeLineExperience" 
           @showTimeLineAcademy="onShowTimeLineAcademy"
-          @showFormContact="onShowFormContact"/>
+          @showFormContact="onShowFormContact"
+          @showTooltip="onShowTooltip"/>
       </div>
       <FileNode 
           v-if="!isMobile && isDelayShowComponents"
@@ -654,10 +672,13 @@ export const splitContainer = `
   <script setup>
   import { ref, onMounted, nextTick, computed } from 'vue';
   import { fileTree, experience, academy } from '../utils/constants';
-  import { terminal, particles, fileNode, codeEditor, splitContainer, timeLine, cardDetail, app } from '../utils/templates';
+  import { terminal, particles, fileNode, codeEditor, splitContainer, timeLine, cardDetail, app, tooltip } from '../utils/templates';
+  import { useI18n } from 'vue-i18n'
   import Split from 'split.js';
   import TimeLine from '../components/TimeLine.vue'
+  import Tooltip  from '~/components/Tooltip.vue';
   
+  const { t } = useI18n()
   const splitInstance = ref(null)
   const currentFile = ref(null)
   const selectedFileId = ref(null)
@@ -672,7 +693,10 @@ export const splitContainer = `
   const selectedExperience = ref(null)
   const selectedAcademy = ref(null)
   const isDelayShowComponents = ref(false)
-
+  const isShowTooltip = ref(false)
+  const isBlinkToolTip = ref(false)
+  const refTerminal = ref(null)
+  const elementTop = ref(null)
   
   const updateSplit = () => {
     const terminalPane = document.querySelector('.terminal-pane');
@@ -682,7 +706,7 @@ export const splitContainer = `
         splitInstance.value.destroy();
       }
       splitInstance.value = Split([terminalPane, editorContainer], {
-        sizes: [85, 15],
+        sizes: [90, 10],
         minSize: [100, 100],
         gutterAlign: 'center',
         gutterSize: 10,
@@ -710,7 +734,15 @@ export const splitContainer = `
     selectedExperience.value = null
     selectedAcademy.value = null
   }
+  const onShowTooltip = (value) => {
+    isShowTooltip.value = value
+  }
+  const blinkToolTip = () => {
+    isBlinkToolTip.value = !isBlinkToolTip.value;
+    setTimeout(blinkToolTip, 500);
+  };
   
+
   const resetSplit = () => {
     const terminalPane = document.querySelector('.terminal-pane');
     const editorContainer = document.querySelector('.editor-container');
@@ -719,7 +751,7 @@ export const splitContainer = `
         splitInstance.value.destroy();
       }
       splitInstance.value = Split([terminalPane, editorContainer], {
-        sizes: [60, 40],
+        sizes: [70, 30],
         minSize: [100, 100],
         gutterAlign: 'center',
         gutterSize: 10,
@@ -737,6 +769,7 @@ export const splitContainer = `
       'SplitContainer.vue': splitContainer,
       'TimeLine.vue': timeLine,
       'CardDetail.vue': cardDetail,
+      'Tooltip.vue': tooltip,
       'app.vue': app
     }[file.label] || '';
   
@@ -799,6 +832,13 @@ const onLeave = (el, done) => {
       }
     });
   });
+
+  onUpdated(() => {
+    if (isDelayShowComponents.value) {
+      elementTop.value = refTerminal.value.inputField
+    }
+  })
+
   </script>
   
   <style lang="postcss">
@@ -830,7 +870,6 @@ const onLeave = (el, done) => {
     transform: translateY(0) scale(1); /* Termina en su posición normal con zoom normal */
   }
   </style>
-  
 `
 
 export const timeLine = `
@@ -1135,4 +1174,52 @@ body {
 }
 </style>
 
+`
+
+export const tooltip = `
+<template>
+    <transition
+      enter-active-class="transition-opacity duration-500"
+      leave-active-class="transition-opacity duration-500"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+    <div v-if="visible" class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 group-hover:block z-50" 
+    :class="[isBlinkToolTip ? 'opacity-100' : 'opacity-0']"
+    :style="{ top: styleTop, left: styleLeft }" >
+    <div class="relative bg-gray-700 text-white text-sm rounded py-2 px-3">
+     {{ text }}
+      <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-t-8 border-t-gray-700 border-x-8 border-x-transparent"></div>
+    </div>
+  </div>
+    </transition>
+</template>
+
+<script setup>
+import { defineProps, onMounted, nextTick } from 'vue'
+const styleTop = ref('0')
+const styleLeft = ref('0')
+
+const props = defineProps({
+    text: String,
+    visible: Boolean,
+    elementTop: Object,
+    isBlinkToolTip: Boolean,
+    blink: Function
+})
+
+onMounted(() => {
+    props.blink()
+    nextTick(() => {
+        if (props.elementTop) {
+            styleTop.value = {String(props.elementTop.getBoundingClientRect().top.toFixed(0) -10)}px
+            styleLeft.value = {String(props.elementTop.getBoundingClientRect().right.toFixed(0) -10)}px
+        }
+    })
+})
+
+
+</script>
 `

@@ -69,7 +69,7 @@
   <script setup>
   import { ref, onMounted, nextTick, computed } from 'vue';
   import { fileTree, experience, academy } from '../utils/constants';
-  import { terminal, particles, fileNode, codeEditor, splitContainer, timeLine, cardDetail, app } from '../utils/templates';
+  import { terminal, particles, fileNode, codeEditor, splitContainer, timeLine, cardDetail, app, tooltip } from '../utils/templates';
   import { useI18n } from 'vue-i18n'
   import Split from 'split.js';
   import TimeLine from '../components/TimeLine.vue'
@@ -166,7 +166,8 @@
       'SplitContainer.vue': splitContainer,
       'TimeLine.vue': timeLine,
       'CardDetail.vue': cardDetail,
-      'app.vue': app
+      'app.vue': app,
+      'ToolTip.vue': tooltip
     }[file.label] || '';
   
     code.value = fileContent;
