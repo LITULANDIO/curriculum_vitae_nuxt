@@ -3,9 +3,9 @@ export const terminal = `
   <div ref="terminalPane" class="inset-0 flex items-center justify-center">
     <div ref="terminalContainer" class="mx-auto w-full max-w-[600px]  px-[10px] h-auto absolute z-10 terminal-container" @pointerdown="focusHiddenInput">
       <div
-        :class="['relative w-full rounded-[10px] flex flex-col overflow-hidden font-mono text-left bg-transparent h-[350px] md:h-[420px]', themeClass, shadowClass]">
+        :class="['relative w-full rounded-[10px] flex flex-col overflow-hidden font-mono text-left bg-transparent h-[350px] md:h-[420px]', textBodyClass, shadowClass]">
         <div
-          :class="['w-full h-[30px] rounded-t-[10px] flex items-center justify-between px-[10px] box-border z-10 terminal-body', themeClass]">
+          :class="['w-full h-[30px] rounded-t-[10px] flex items-center justify-between px-[10px] box-border z-10 terminal-body', bgHeaderClass]">
           <div class="flex gap-2">
             <span class="w-[12px] h-[12px] rounded-full bg-[#ff5f57]"></span>
             <span
@@ -15,10 +15,10 @@ export const terminal = `
               class="w-[12px] h-[12px] rounded-full bg-[#28c940] cursor-pointer">
             </span>
           </div>
-          <div :class="['flex-1 text-center font-bold', themeClass]">{{ $t('terminal.header') }}</div>
+          <div :class="['flex-1 text-center font-bold', textHeaderClass]">{{ $t('terminal.header') }}</div>
         </div>
         <div
-          :class="['absolute top-[25px] left-0 right-0 bottom-0 rounded-b-[10px] z-0', themeClass]"
+          :class="['absolute top-[25px] left-0 right-0 bottom-0 rounded-b-[10px] z-0', bgBodyClass]"
           >
         </div>
         <div ref="outputRef" class="relative z-20 flex-1 overflow-y-auto p-2.5 whitespace-pre-wrap pb-2.5 text-xs md:text-base max-h-[350px]">
@@ -75,9 +75,12 @@ export const terminal = `
     t('terminal.commands3'),
     t('terminal.commands4')
   ])
-  const themeClass = computed(() => isDarkTheme ? 'bg-black' : 'bg-white')
-  const shadowClass = computed(() => isDarkTheme ? 'shadow-shadow-white' : 'shadow-shadow-dark')
-  const cursorClass = computed(() => cursorActive ? 'opacity-100' : 'opacity-0')
+  const bgBodyClass = computed(() => isDarkTheme.value ? 'bg-black' : 'bg-white')
+  const bgHeaderClass = computed(() => isDarkTheme.value ? 'bg-white' : 'bg-black')
+  const textBodyClass = computed(() => isDarkTheme.value ? 'text-white' : 'text-black')
+  const textHeaderClass = computed(() => isDarkTheme.value ? 'text-black' : 'text-white')
+  const shadowClass = computed(() => isDarkTheme.value ? 'shadow-shadow-white' : 'shadow-shadow-dark')
+  const cursorClass = computed(() => cursorActive.value ? 'opacity-100' : 'opacity-0')
 
   const typeCommand = () => {
     if (commandIndex.value < commands.value.length) {
