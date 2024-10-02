@@ -617,17 +617,17 @@ export const splitContainer = `
           @showFormContact="onShowFormContact"
           @showTooltip="onShowTooltip"/>
       </div>
-      <FileNode 
-          v-if="!isMobile && isDelayShowComponents"
-          :nodes="tree" 
-          :selectedFileId="selectedFileId"
-          @selectNode="loadFileContent" />
-      <CodeEditor 
-        v-if="!isMobile && isDelayShowComponents"
-        class="editor-container" 
-        :currentCode="code"
-        :currentFile="currentFile"
-        @updateCode="onUpdateCode" />
+        <template  v-if="!isMobile && isDelayShowComponents">
+          <FileNode 
+              :nodes="tree" 
+              :selectedFileId="selectedFileId"
+              @selectNode="loadFileContent" />
+          <CodeEditor 
+            class="editor-container" 
+            :currentCode="code"
+            :currentFile="currentFile"
+            @updateCode="onUpdateCode" />
+        </template>
     </div>
   </template>
   
