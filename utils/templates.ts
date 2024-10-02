@@ -565,68 +565,60 @@ export const splitContainer = `
 <template>
     <div class="h-screen px-2 md:flex">
       <div class="flex flex-col terminal-pane">
-        <transition  
-          @before-enter="onBeforeEnter"
-          @enter="onEnter"
-          @leave="onLeave">
+        <TransitionGroup>
           <TimeLine 
-            v-show="isTimeLineExperience && !selectedExperience"
-            :events="experiences"
-            @selectEvent="onSelectExeperience"
-            />
-        </transition>
-        <transition  
-          @before-enter="onBeforeEnter"
-          @enter="onEnter"
-          @leave="onLeave">
-          <TimeLine 
-            v-show="isTimeLineAcademy && !selectedAcademy"
-            :events="academies"
-            @selectEvent="onSelectAcademy"
-            />
-        </transition>
+            v-for="(timeline, index) in timelineData"
+            :key="index"
+            v-show="timeline.isVisible && !timeline.selected"
+            :events="timeline.events"
+            @selectEvent="timeline.onSelect"
+          />
+        </TransitionGroup>
+        
         <ContactForm :isVisible="isFormContact" @close="isFormContact = false"/>
-        <transition name="detail">
+        
+        <TransitionGroup name="detail">
           <CardDetail 
-            v-if="selectedExperience"
+            v-for="(detail, index) in detailData"
+            :key="index"
+            v-if="detail.selected"
             class="absolute w-full"
-            :event="selectedExperience"
+            :event="detail.selected"
             @goBack="showTimeline"
           />
-        </transition>
-        <transition name="detail">
-          <CardDetail 
-            v-if="selectedAcademy"
-            class="absolute w-full"
-            :event="selectedAcademy"
-            @goBack="showTimeline"
-          />
-        </transition>
-        <Tooltip  v-if="isDelayShowComponents" 
+        </TransitionGroup>
+        
+        <Tooltip v-if="isDelayShowComponents" 
           :text="$t('tooltip.text')" 
           :elementTop="elementTop" 
           :visible="isShowTooltip"
           :isBlinkToolTip="isBlinkToolTip"
           :blink="blinkToolTip"
+          @onClicked="onHiddenToolTip"
         />
+        
         <Terminal v-if="isDelayShowComponents" 
           ref="refTerminal"
           @showTimeLineExperience="onShowTimeLineExperience" 
           @showTimeLineAcademy="onShowTimeLineAcademy"
           @showFormContact="onShowFormContact"
-          @showTooltip="onShowTooltip"/>
+          @showTooltip="onShowTooltip"
+        />
       </div>
-      <FileNode 
-          v-if="!isMobile && isDelayShowComponents"
+      
+      <template v-if="!isMobile && isDelayShowComponents">
+        <FileNode 
           :nodes="tree" 
           :selectedFileId="selectedFileId"
-          @selectNode="loadFileContent" />
-      <CodeEditor 
-        v-if="!isMobile && isDelayShowComponents"
-        class="editor-container" 
-        :currentCode="code"
-        :currentFile="currentFile"
-        @updateCode="onUpdateCode" />
+          @selectNode="loadFileContent" 
+        />
+        <CodeEditor 
+          class="editor-container" 
+          :currentCode="code"
+          :currentFile="currentFile"
+          @updateCode="onUpdateCode" 
+        />
+      </template>
     </div>
   </template>
   
@@ -702,6 +694,11 @@ export const splitContainer = `
     isBlinkToolTip.value = !isBlinkToolTip.value;
     setTimeout(blinkToolTip, 500);
   };
+
+  const onHiddenToolTip = () => {
+    isShowTooltip.value = false
+    isBlinkToolTip.value = false
+  }
   
 
   const resetSplit = () => {
@@ -730,8 +727,8 @@ export const splitContainer = `
       'SplitContainer.vue': splitContainer,
       'TimeLine.vue': timeLine,
       'CardDetail.vue': cardDetail,
-      'Tooltip.vue': tooltip,
-      'app.vue': app
+      'app.vue': app,
+      'ToolTip.vue': tooltip
     }[file.label] || '';
   
     code.value = fileContent;
@@ -831,6 +828,7 @@ const onLeave = (el, done) => {
     transform: translateY(0) scale(1);
   }
   </style>
+
 `
 
 export const timeLine = `
