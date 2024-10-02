@@ -565,30 +565,44 @@ export const splitContainer = `
 <template>
     <div class="h-screen px-2 md:flex">
       <div class="flex flex-col terminal-pane">
-        <TransitionGroup>
+        <transition  
+          @before-enter="onBeforeEnter"
+          @enter="onEnter"
+          @leave="onLeave">
           <TimeLine 
-            v-for="(timeline, index) in timelineData"
-            :key="index"
-            v-show="timeline.isVisible && !timeline.selected"
-            :events="timeline.events"
-            @selectEvent="timeline.onSelect"
-          />
-        </TransitionGroup>
-        
+            v-show="isTimeLineExperience && !selectedExperience"
+            :events="experiences"
+            @selectEvent="onSelectExeperience"
+            />
+        </transition>
+        <transition  
+          @before-enter="onBeforeEnter"
+          @enter="onEnter"
+          @leave="onLeave">
+          <TimeLine 
+            v-show="isTimeLineAcademy && !selectedAcademy"
+            :events="academies"
+            @selectEvent="onSelectAcademy"
+            />
+        </transition>
         <ContactForm :isVisible="isFormContact" @close="isFormContact = false"/>
-        
-        <TransitionGroup name="detail">
+        <transition name="detail">
           <CardDetail 
-            v-for="(detail, index) in detailData"
-            :key="index"
-            v-if="detail.selected"
+            v-if="selectedExperience"
             class="absolute w-full"
-            :event="detail.selected"
+            :event="selectedExperience"
             @goBack="showTimeline"
           />
-        </TransitionGroup>
-        
-        <Tooltip v-if="isDelayShowComponents" 
+        </transition>
+        <transition name="detail">
+          <CardDetail 
+            v-if="selectedAcademy"
+            class="absolute w-full"
+            :event="selectedAcademy"
+            @goBack="showTimeline"
+          />
+        </transition>
+        <Tooltip  v-if="isDelayShowComponents" 
           :text="$t('tooltip.text')" 
           :elementTop="elementTop" 
           :visible="isShowTooltip"
@@ -596,34 +610,29 @@ export const splitContainer = `
           :blink="blinkToolTip"
           @onClicked="onHiddenToolTip"
         />
-        
         <Terminal v-if="isDelayShowComponents" 
           ref="refTerminal"
           @showTimeLineExperience="onShowTimeLineExperience" 
           @showTimeLineAcademy="onShowTimeLineAcademy"
           @showFormContact="onShowFormContact"
-          @showTooltip="onShowTooltip"
-        />
+          @showTooltip="onShowTooltip"/>
       </div>
-      
-      <template v-if="!isMobile && isDelayShowComponents">
-        <FileNode 
+      <FileNode 
+          v-if="!isMobile && isDelayShowComponents"
           :nodes="tree" 
           :selectedFileId="selectedFileId"
-          @selectNode="loadFileContent" 
-        />
-        <CodeEditor 
-          class="editor-container" 
-          :currentCode="code"
-          :currentFile="currentFile"
-          @updateCode="onUpdateCode" 
-        />
-      </template>
+          @selectNode="loadFileContent" />
+      <CodeEditor 
+        v-if="!isMobile && isDelayShowComponents"
+        class="editor-container" 
+        :currentCode="code"
+        :currentFile="currentFile"
+        @updateCode="onUpdateCode" />
     </div>
   </template>
   
   <script setup>
-  import { ref, onMounted, nextTick, computed } from 'vue';
+  import { ref, onMounted, nextTick, compute, onUnmounted } from 'vue';
   import { fileTree, experience, academy } from '../utils/constants';
   import { terminal, particles, fileNode, codeEditor, splitContainer, timeLine, cardDetail, app, tooltip } from '../utils/templates';
   import { useI18n } from 'vue-i18n'
@@ -667,40 +676,24 @@ export const splitContainer = `
     }
   };
 
-  const onShowTimeLineExperience = (value) => {
-    isTimeLineExperience.value = value
-  }
-  const onShowTimeLineAcademy = (value) => {
-    isTimeLineAcademy.value = value
-  }
-  const onShowFormContact = (value) => {
-    console.log({value})
-    isFormContact.value = value
-  }
-  const onSelectExeperience = (experience) => {
-      selectedExperience.value = experience;
-  }
-  const onSelectAcademy = (academy) => {
-    selectedAcademy.value = academy
-  }
+  const onShowTimeLineExperience = value => isTimeLineExperience.value = value
+  const onShowTimeLineAcademy = value => isTimeLineAcademy.value = value
+  const onShowFormContact = value => isFormContact.value = value
+  const onSelectExeperience = experience => selectedExperience.value = experience
+  const onSelectAcademy = academy => selectedAcademy.value = academy
   const showTimeline = () => {
     selectedExperience.value = null
     selectedAcademy.value = null
   }
-  const onShowTooltip = (value) => {
-    isShowTooltip.value = value
-  }
+  const onShowTooltip = value => isShowTooltip.value = value
   const blinkToolTip = () => {
     isBlinkToolTip.value = !isBlinkToolTip.value;
     setTimeout(blinkToolTip, 500);
-  };
-
+  }
   const onHiddenToolTip = () => {
     isShowTooltip.value = false
     isBlinkToolTip.value = false
   }
-  
-
   const resetSplit = () => {
     const terminalPane = document.querySelector('.terminal-pane');
     const editorContainer = document.querySelector('.editor-container');
@@ -717,7 +710,7 @@ export const splitContainer = `
     }
   };
   
-  const loadFileContent = (file) => {
+  const loadFileContent = file => {
     selectedFileId.value = file.id;
     const fileContent = {
       'Terminal.vue': terminal,
@@ -748,58 +741,51 @@ export const splitContainer = `
       loadFileContent(defaultFile);
     }
   }
-};
-  
-  const onUpdateCode = (newCode) => {
-    code.value = newCode;
-  };
-
-  const onBeforeEnter = (el) => {
-  el.style.transform = 'rotateY(-90deg)';
-  el.style.opacity = '0';
-};
-
+}
+const onUpdateCode = newCode => code.value = newCode
+const onBeforeEnter = el => {
+  el.style.transform = 'rotateY(-90deg)'
+  el.style.opacity = '0'
+}
 const onEnter = (el, done) => {
   setTimeout(() => {
-    el.style.transition = 'transform 0.6s ease, opacity 0.6s ease';
-    el.style.transform = 'rotateY(0deg)';
-    el.style.opacity = '1';
-    done();
-  });
-};
-
+    el.style.transition = 'transform 0.6s ease, opacity 0.6s ease'
+    el.style.transform = 'rotateY(0deg)'
+    el.style.opacity = '1'
+    done()
+  })
+}
 const onLeave = (el, done) => {
-  el.style.transition = 'transform 0.6s ease, opacity 0.6s ease';
-  el.style.transform = 'rotateY(90deg)';
-  el.style.opacity = '0';
+  el.style.transition = 'transform 0.6s ease, opacity 0.6s ease'
+  el.style.transform = 'rotateY(90deg)'
+  el.style.opacity = '0'
   setTimeout(() => {
-    done();
-  }, 600);
-};
-
-  
-  onMounted(() => {
-    nextTick(() => {
-      isDelayShowComponents.value = true
-      initializeDefaultFile();
-      updateSplit();
-    });
-    window.addEventListener('resize', () => {
-      if (splitInstance.value) {
-        updateSplit();
-      }
-    });
-  });
-
-  onUpdated(() => {
-    if (isDelayShowComponents.value) {
-      elementTop.value = refTerminal.value.inputField
+    done()
+  }, 600)
+}  
+onMounted(() => {
+  nextTick(() => {
+    isDelayShowComponents.value = true
+    initializeDefaultFile()
+    updateSplit()
+  })
+  window.addEventListener('resize', () => {
+    if (splitInstance.value) {
+      updateSplit()
     }
   })
-
-  </script>
+})
+onUpdated(() => {
+  if (isDelayShowComponents.value) {
+    elementTop.value = refTerminal.value.inputField
+  }
+})
+onUnmounted(() => {
+  window.removeEventListener('resize')
+})
+</script>
   
-  <style lang="postcss">
+<style lang="postcss">
   .editor-container {
     @apply w-full h-full bg-[#2d2d2d] text-white;
   }
@@ -817,17 +803,18 @@ const onLeave = (el, done) => {
   .detail-enter-active, .detail-leave-active {
     transition: all 0.8s ease;
   }
-  
+
   .detail-enter-from, .detail-leave-to {
     opacity: 0;
     transform: translateY(50px) scale(0.8);
   }
-  
+
   .detail-enter-to, .detail-leave-from {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-  </style>
+</style>
+
 
 `
 
