@@ -1,29 +1,23 @@
 <template>
   <div ref="terminalPane" class="inset-0 flex items-center justify-center">
-    <div ref="terminalContainer" class="mx-auto w-full max-w-[600px]  px-[10px] h-auto absolute z-10 terminal-container" @click="focusHiddenInput" @touch="focusHiddenInput">
+    <div ref="terminalContainer" class="mx-auto w-full max-w-[600px]  px-[10px] h-auto absolute z-10 terminal-container" @pointerdown="focusHiddenInput">
       <div
-        class="relative w-full rounded-[10px] flex flex-col overflow-hidden font-mono text-left bg-transparent h-[350px] md:h-[420px]"
-        :class="[isDarkTheme ? 'text-white' : 'text-black', isDarkTheme ? 'shadow-shadow-white' : 'shadow-shadow-dark']">
+        :class="['relative w-full rounded-[10px] flex flex-col overflow-hidden font-mono text-left bg-transparent h-[350px] md:h-[420px]', themeClass, shadowClass]">
         <div
-          class="w-full h-[30px] rounded-t-[10px] flex items-center justify-between px-[10px] box-border z-10 terminal-body"
-          :class="[isDarkTheme ? 'bg-white' : 'bg-black']">
+          :class="['w-full h-[30px] rounded-t-[10px] flex items-center justify-between px-[10px] box-border z-10 terminal-body', themeClass]">
           <div class="flex gap-2">
             <span class="w-[12px] h-[12px] rounded-full bg-[#ff5f57]"></span>
             <span
-              @click="minimizeTerminal"
               class="w-[12px] h-[12px] rounded-full bg-[#ffbd2e] cursor-pointer">
             </span>
             <span
-              @click="maximizeTerminal"
               class="w-[12px] h-[12px] rounded-full bg-[#28c940] cursor-pointer">
             </span>
           </div>
-          <div class="flex-1 text-center font-bold"
-          :class="[isDarkTheme ? 'text-black' : 'text-white']">{{ $t('terminal.header') }}</div>
+          <div :class="['flex-1 text-center font-bold', themeClass]">{{ $t('terminal.header') }}</div>
         </div>
         <div
-          class="absolute top-[25px] left-0 right-0 bottom-0 rounded-b-[10px] z-0"
-          :class="[isDarkTheme ? 'bg-black' : 'bg-white']"
+          :class="['absolute top-[25px] left-0 right-0 bottom-0 rounded-b-[10px] z-0', themeClass]"
           >
         </div>
         <div ref="outputRef" class="relative z-20 flex-1 overflow-y-auto p-2.5 whitespace-pre-wrap pb-2.5 text-xs md:text-base max-h-[350px]">
@@ -45,8 +39,7 @@
             {{ currentInput }}
           </span>
           <span
-            class="inline-block w-[10px] bg-[#00ff00] text-[#00ff00] ml-1.5"
-            :class="[cursorActive ? 'opacity-100' : 'opacity-0']"
+            :class="['inline-block w-[10px] bg-[#00ff00] text-[#00ff00] ml-1.5', cursorClass]"
             >|</span
           >
         </div>
@@ -60,58 +53,60 @@
   import { useTheme } from '~/composables/useTheme';
   import { useI18n } from 'vue-i18n'
 
-  const outputLines = ref([]);
-  const currentInput = ref('');
-  const cursorActive = ref(true);
-  const hiddenInput = ref(null);
-  const outputRef = ref(null);
-  const commandIndex = ref(0);
-  const charIndex = ref(0);
-  const isUserInputEnabled = ref(false);
-  const editorInstance = ref(null);
-  const { isDarkTheme } = useTheme();
+  const outputLines = ref([])
+  const currentInput = ref('')
+  const cursorActive = ref(true)
+  const hiddenInput = ref(null)
+  const outputRef = ref(null)
+  const commandIndex = ref(0)
+  const charIndex = ref(0)
+  const isUserInputEnabled = ref(false)
+  const editorInstance = ref(null)
+  const { isDarkTheme } = useTheme()
   const { t, locale } = useI18n()
   const terminalContainer = ref(null)
   const inputField = ref(null)
 
   const emit = defineEmits(['showTimeLineExperience', 'showTimeLineAcademy', 'showFormContact', 'showTooltip'])
   const commands = computed(() => [
-  t('terminal.commands1'),
-  t('terminal.commands2'),
-  t('terminal.commands3'),
-  t('terminal.commands4')
-]);
-
+    t('terminal.commands1'),
+    t('terminal.commands2'),
+    t('terminal.commands3'),
+    t('terminal.commands4')
+  ])
+  const themeClass = computed(() => isDarkTheme ? 'bg-black' : 'bg-white')
+  const shadowClass = computed(() => isDarkTheme ? 'shadow-shadow-white' : 'shadow-shadow-dark')
+  const cursorClass = computed(() => cursorActive ? 'opacity-100' : 'opacity-0')
 
   const typeCommand = () => {
     if (commandIndex.value < commands.value.length) {
       if (charIndex.value < commands.value[commandIndex.value].length) {
-        currentInput.value += commands.value[commandIndex.value].charAt(charIndex.value);
-        charIndex.value++;
-        setTimeout(typeCommand, 100);
+        currentInput.value += commands.value[commandIndex.value].charAt(charIndex.value)
+        charIndex.value++
+        setTimeout(typeCommand, 100)
       } else {
-        const fullCommand = commands.value[commandIndex.value];
-        outputLines.value.push(fullCommand);
+        const fullCommand = commands.value[commandIndex.value]
+        outputLines.value.push(fullCommand)
         
         setTimeout(() => {
-          currentInput.value = '';
+          currentInput.value = ''
           setTimeout(() => {
-            commandIndex.value++;
-            typeCommand();
-          }, 500);
-        }, 1500);
+            commandIndex.value++
+            typeCommand()
+          }, 500)
+        }, 1500)
         
-        charIndex.value = 0;
+        charIndex.value = 0
       }
     } else {
       outputLines.value.push(' ')
-      outputLines.value.push('terminal.commands5');
-      outputLines.value.push('terminal.commands6');
+      outputLines.value.push('terminal.commands5')
+      outputLines.value.push('terminal.commands6')
       isUserInputEnabled.value = true;
       emit('showTooltip', true)
     }
-    scrollToBottom();
-  };
+    scrollToBottom()
+  }
 
   const translatedOutputLines = computed(() => {
     return outputLines.value.map(line => {
@@ -130,40 +125,25 @@
       }
     })
   })
-
-  const sendEmiterShowTimeLineExperience = () => {
-    emit('showTimeLineExperience', true)
-  }
-  const sendEmiterHiddenTimeLineExperience = () => {
-    emit('showTimeLineExperience', false)
-  }
-  const sendEmiterShowContactForm = () => {
-    emit('showFormContact', true)
-  }
-  const sendEmiterHiddenContactForm = () => {
-    emit('showFormContact', false)
-  }
-  const sendEmiterShowTimelineAcademy = () => {
-    emit('showTimeLineAcademy', true)
-  }
-  const sendEmiterHiddenTimelineAcademy = () => {
-    emit('showTimeLineAcademy', false)
-  }
-  const showTooltip = () => {
-    emit('showTooltip', false)
-  }
+  const sendEmiterShowTimeLineExperience = () => emit('showTimeLineExperience', true)
+  const sendEmiterHiddenTimeLineExperience = () => emit('showTimeLineExperience', false)
+  const sendEmiterShowContactForm = () => emit('showFormContact', true)
+  const sendEmiterHiddenContactForm = () => emit('showFormContact', false)
+  const sendEmiterShowTimelineAcademy = () => emit('showTimeLineAcademy', true)
+  const sendEmiterHiddenTimelineAcademy = () => emit('showTimeLineAcademy', false)
+  const showTooltip = () => emit('showTooltip', false)
 
   const downloadPDF = () => {
-    const link = document.createElement('a');
+    const link = document.createElement('a')
     link.href = '/api/pdf';
-    link.download = 'cv_carlesfar.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+    link.download = 'cv_carlesfar.pdf'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
   
   const processUserCommand = (input) => {
-    if (typeof input !== 'string') return;
+    if (typeof input !== 'string') return
 
     const commands = {
       'ayuda': handleHelp,
@@ -182,122 +162,122 @@
       'clear': handleClear
     };
 
-    const command = commands[input.toLowerCase()];
+    const command = commands[input.toLowerCase()]
     if (command) {
-      command();
+      command()
     } else {
-      outputLines.value.push(t('terminal.commands7', { input }));
+      outputLines.value.push(t('terminal.commands7', { input }))
     }
     
-    scrollToBottom();
+    scrollToBottom()
   };
 
   const handleHelp = () => {
     outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help7', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6');
-    hideAllSections();
+    hideAllSections()
+  }
+
+  const handleExperience = message => {
+    emit('showTimeLineExperience', true)
+    hideAllSections(['showTimeLineExperience'])
+    outputLines.value.push(message)
+    hiddenInput.value.blur()
   };
 
-  const handleExperience = (message) => {
-    emit('showTimeLineExperience', true);
-    hideAllSections(['showTimeLineExperience']);
-    outputLines.value.push(message);
-    hiddenInput.value.blur();
-  };
-
-  const handleAcademy = (message) => {
-    emit('showTimeLineAcademy', true);
-    hideAllSections(['showTimeLineAcademy']);
-    outputLines.value.push(message);
-    hiddenInput.value.blur();
+  const handleAcademy = message => {
+    emit('showTimeLineAcademy', true)
+    hideAllSections(['showTimeLineAcademy'])
+    outputLines.value.push(message)
+    hiddenInput.value.blur()
   };
 
   const handleProjects = () => {
-    window.open('https://github.com/LITULANDIO', '_blank');
-    outputLines.value.push('terminal.commands8');
-    hideAllSections();
+    window.open('https://github.com/LITULANDIO', '_blank')
+    outputLines.value.push('terminal.commands8')
+    hideAllSections()
   };
 
   const handleContact = () => {
-    window.location.href = 'mailto:contacto@carlesfar.com';
-    hideAllSections();
-    hiddenInput.value.blur();
+    window.location.href = 'mailto:contacto@carlesfar.com'
+    hideAllSections()
+    hiddenInput.value.blur()
   };
 
-  const handleDownloadCV = (message) => {
-    downloadPDF();
-    outputLines.value.push(message);
-    hideAllSections();
+  const handleDownloadCV = message => {
+    downloadPDF()
+    outputLines.value.push(message)
+    hideAllSections()
   };
 
   const handleClear = () => {
-    hideAllSections();
-    outputLines.value = [];
+    hideAllSections()
+    outputLines.value = []
   };
 
   const hideAllSections = (exceptSections = []) => {
     const sections = ['showTimeLineExperience', 'showFormContact', 'showTimeLineAcademy'];
     sections.forEach(section => {
       if (!exceptSections.includes(section)) {
-        emit(section, false);
+        emit(section, false)
       }
-    });
-  };
+    })
+  }
 
   const handleKeyPress = (event) => {
-    if (!isUserInputEnabled.value) return;
-    event.preventDefault();
+    if (!isUserInputEnabled.value) return
+    event.preventDefault()
 
     if (event.key === 'Enter') {
       if (currentInput.value.trim() !== '') {
-        outputLines.value.push(currentInput.value);
+        outputLines.value.push(currentInput.value)
         processUserCommand(currentInput.value)
-        currentInput.value = '';
+        currentInput.value = ''
       }
     } else if (event.key === 'Backspace') {
-      currentInput.value = currentInput.value.slice(0, -1);
+      currentInput.value = currentInput.value.slice(0, -1)
     } else if (event.key.length === 1) {
-      currentInput.value += event.key;
+      currentInput.value += event.key
     }
-    scrollToBottom();
+    scrollToBottom()
   };
   
   const blinkCursor = () => {
-    cursorActive.value = !cursorActive.value;
-    setTimeout(blinkCursor, 500);
-  };
+    cursorActive.value = !cursorActive.value
+    setTimeout(blinkCursor, 500)
+  }
   
   const scrollToBottom = () => {
     nextTick(() => {
-      const outputEl = outputRef.value;
+      const outputEl = outputRef.value
       if (outputEl) {
-        outputEl.scrollTop = outputEl.scrollHeight;
+        outputEl.scrollTop = outputEl.scrollHeight
       }
-    });
-  };
+    })
+  }
   
   const focusHiddenInput = () => {
     if (hiddenInput.value) {
-      hiddenInput.value.focus();
+      hiddenInput.value.focus()
       showTooltip()
     }
-  };
-  
-  const minimizeTerminal = () => {
-    const terminal = document.querySelector('.terminal');
-    terminal.classList.add('terminal-minimized');
-  };
-  
-  const maximizeTerminal = () => {
-    const terminal = document.querySelector('.terminal');
-    terminal.classList.remove('terminal-minimized');
   }
+  
+  // const minimizeTerminal = () => {
+  //   const terminal = document.querySelector('.terminal')
+  //   terminal.classList.add('terminal-minimized')
+  // }
+  
+  // const maximizeTerminal = () => {
+  //   const terminal = document.querySelector('.terminal')
+  //   terminal.classList.remove('terminal-minimized')
+  // }
 
   const handleTouchStart = (event) => {
   nextTick(() => {
-    const terminalPane = document.querySelector('.terminal-pane');
+    const terminalPane = document.querySelector('.terminal-pane')
     if (terminalPane && terminalPane.contains(event.target)) {
-      focusHiddenInput();
-      window.scrollTo(0, 50);
+      focusHiddenInput()
+      window.scrollTo(0, 50)
     }
   })
   }
@@ -311,8 +291,8 @@ defineExpose({ inputField })
 
   onMounted(() => {
     console.log(locale.value)
-    typeCommand();
-    blinkCursor();
+    typeCommand()
+    blinkCursor()
     terminalContainer.value.addEventListener('touchstart', handleTouchStart)
     terminalContainer.value.addEventListener('keydown', handleKeyPress)
     window.addEventListener('resize', handleResize)
