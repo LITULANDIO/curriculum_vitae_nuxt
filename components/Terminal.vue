@@ -1,6 +1,6 @@
 <template>
   <div ref="terminalPane" class="inset-0 flex items-center justify-center">
-    <div ref="terminalContainer" class="mx-auto w-full max-w-[600px]  px-[10px] h-auto absolute z-10 terminal-container" @pointerdown="focusHiddenInput">
+    <div ref="terminalContainer" class="mx-auto w-full max-w-[600px]  px-[10px] h-auto absolute z-10 terminal-container" @click="focusHiddenInput" @touch="focusHiddenInput">
       <div
         :class="['relative w-full rounded-[10px] flex flex-col overflow-hidden font-mono text-left bg-transparent h-[350px] md:h-[420px]', textBodyClass, shadowClass]">
         <div
