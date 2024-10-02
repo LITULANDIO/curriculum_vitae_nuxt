@@ -163,122 +163,87 @@ export const terminal = `
     document.body.removeChild(link);
   };
   
-  const processUserCommandES = (input) => {
-    if (typeof input !== 'string') {
-      return;
+  const processUserCommand = (input) => {
+    if (typeof input !== 'string') return;
+
+    const commands = {
+      'ayuda': handleHelp,
+      'help': handleHelp,
+      'experiencia': () => handleExperience('terminal.commands10'),
+      'experience': () => handleExperience('terminal.commands10'),
+      'formacion': () => handleAcademy('terminal.commands11'),
+      'academy': () => handleAcademy('terminal.commands11'),
+      'proyectos': handleProjects,
+      'projects': handleProjects,
+      'contacto': handleContact,
+      'contact': handleContact,
+      'descargar_cv': () => handleDownloadCV('terminal.commands9'),
+      'download_cv': () => handleDownloadCV('terminal.commands9'),
+      'limpiar': handleClear,
+      'clear': handleClear
+    };
+
+    const command = commands[input.toLowerCase()];
+    if (command) {
+      command();
+    } else {
+      outputLines.value.push(t('terminal.commands7', { input }));
     }
-    switch (input.toLowerCase()) {
-      case 'ayuda': 
-        outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help7', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
-        sendEmiterHiddenTimeLineExperience()
-        sendEmiterHiddenContactForm()
-        sendEmiterHiddenTimelineAcademy()
-        break;
-      case 'experiencia':
-        sendEmiterShowTimeLineExperience()
-        sendEmiterHiddenContactForm()
-        sendEmiterHiddenTimelineAcademy()
-        outputLines.value.push('terminal.commands10');
-        hiddenInput.value.blur()
-        break;
-      case 'formacion': 
-        sendEmiterShowTimelineAcademy()
-        sendEmiterHiddenTimeLineExperience()
-        sendEmiterHiddenContactForm()
-        outputLines.value.push('terminal.commands11');
-        hiddenInput.value.blur()
-        break;
-      case 'proyectos':
-        window.open('https://github.com/LITULANDIO', '_blank');
-        outputLines.value.push('terminal.commands8');
-        sendEmiterHiddenTimeLineExperience()
-        sendEmiterHiddenContactForm()
-        sendEmiterHiddenTimelineAcademy()
-        break;
-      case 'contacto':
-        window.location.href='mailto:contacto@carlesfar.com'
-        // sendEmiterShowContactForm()
-        sendEmiterHiddenTimeLineExperience()
-        sendEmiterHiddenTimelineAcademy()
-        hiddenInput.value.blur()
-        break;
-      case 'descargar_cv':
-        downloadPDF()
-        outputLines.value.push('terminal.commands9');
-        sendEmiterHiddenTimeLineExperience()
-        sendEmiterHiddenContactForm()
-        sendEmiterHiddenTimelineAcademy()
-        break;
-      case 'limpiar':
-        sendEmiterHiddenTimeLineExperience()
-        sendEmiterHiddenContactForm()
-        sendEmiterHiddenTimelineAcademy()
-        outputLines.value = [];
-        break;
-      default:
-        outputLines.value.push({t('terminal.commands7', {input})});
-    }
+    
     scrollToBottom();
   };
 
-  const processUserCommandEN = (input) => {
-    if (typeof input !== 'string') {
-      return;
-    }
-    switch (input.toLowerCase()) {
-      case 'help':
-        outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help7', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6')
-        sendEmiterHiddenTimeLineExperience()
-        sendEmiterHiddenTimelineAcademy()
-        sendEmiterHiddenContactForm()
-        break;
-      case 'experience':
-        sendEmiterShowTimeLineExperience()
-        sendEmiterHiddenTimelineAcademy()
-        sendEmiterHiddenContactForm()
-        outputLines.value.push('terminal.commands10');
-        hiddenInput.value.blur()
-        break;
-      case 'academy': 
-        sendEmiterShowTimelineAcademy()
-        sendEmiterHiddenTimeLineExperience()
-        sendEmiterHiddenContactForm()
-        outputLines.value.push('terminal.commands11');
-        hiddenInput.value.blur()
-        break;
-      case 'projects':
-        window.open('https://github.com/LITULANDIO', '_blank');
-        outputLines.value.push('terminal.commands8');
-        sendEmiterHiddenTimeLineExperience()
-        sendEmiterHiddenTimelineAcademy()
-        sendEmiterHiddenContactForm()
-        break;
-      case 'contact':
-        window.location.href='mailto:contacto@carlesfar.com'
-        // sendEmiterShowContactForm()
-        sendEmiterHiddenTimeLineExperience()
-        sendEmiterHiddenTimelineAcademy()
-        hiddenInput.value.blur()
-        break;
-      case 'download_cv':
-        downloadPDF()
-        outputLines.value.push('terminal.commands9');
-        sendEmiterHiddenTimeLineExperience()
-        sendEmiterHiddenTimelineAcademy()
-        sendEmiterHiddenContactForm()
-        break;
-      case 'clear':
-        sendEmiterHiddenTimeLineExperience()
-        sendEmiterHiddenTimelineAcademy()
-        sendEmiterHiddenContactForm()
-        outputLines.value = [];
-        break;
-      default:
-        outputLines.value.push({t('terminal.commands7', {input})});
-    }
-    scrollToBottom();
+  const handleHelp = () => {
+    outputLines.value.push('terminal.help1', 'terminal.help2', 'terminal.help7', 'terminal.help3', 'terminal.help4', 'terminal.help5', 'terminal.help6');
+    hideAllSections();
   };
-  
+
+  const handleExperience = (message) => {
+    emit('showTimeLineExperience', true);
+    hideAllSections(['showTimeLineExperience']);
+    outputLines.value.push(message);
+    hiddenInput.value.blur();
+  };
+
+  const handleAcademy = (message) => {
+    emit('showTimeLineAcademy', true);
+    hideAllSections(['showTimeLineAcademy']);
+    outputLines.value.push(message);
+    hiddenInput.value.blur();
+  };
+
+  const handleProjects = () => {
+    window.open('https://github.com/LITULANDIO', '_blank');
+    outputLines.value.push('terminal.commands8');
+    hideAllSections();
+  };
+
+  const handleContact = () => {
+    window.location.href = 'mailto:contacto@carlesfar.com';
+    hideAllSections();
+    hiddenInput.value.blur();
+  };
+
+  const handleDownloadCV = (message) => {
+    downloadPDF();
+    outputLines.value.push(message);
+    hideAllSections();
+  };
+
+  const handleClear = () => {
+    hideAllSections();
+    outputLines.value = [];
+  };
+
+  const hideAllSections = (exceptSections = []) => {
+    const sections = ['showTimeLineExperience', 'showFormContact', 'showTimeLineAcademy'];
+    sections.forEach(section => {
+      if (!exceptSections.includes(section)) {
+        emit(section, false);
+      }
+    });
+  };
+
   const handleKeyPress = (event) => {
     if (!isUserInputEnabled.value) return;
     event.preventDefault();
@@ -286,11 +251,7 @@ export const terminal = `
     if (event.key === 'Enter') {
       if (currentInput.value.trim() !== '') {
         outputLines.value.push(currentInput.value);
-        if (locale.value === 'en') {
-          processUserCommandEN(currentInput.value)
-        } else {
-          processUserCommandES(currentInput.value);
-        }
+        processUserCommand(currentInput.value)
         currentInput.value = '';
       }
     } else if (event.key === 'Backspace') {
