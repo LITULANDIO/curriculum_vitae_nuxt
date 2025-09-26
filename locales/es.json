@@ -1,51 +1,49 @@
 {
-    "terminal": {
-      "header": "Terminal de comandos",
-      "commands1": "¡Hola!👋 me llamo Carles",
-      "commands2": "Bienvenido a mi currículum interactivo",
-      "commands3": "Soy un apasionado del diseño y desarrollo web 👨🏻‍💻",
-      "commands4": "Mi especialidad es el Front end",
-      "commands5": "Terminal lista para recibir comandos. 🚀",
-      "commands6": "Escribe 'ayuda' y pulsa ENTER para ver los comandos disponibles",
-      "commands7": "Comando no reconocido: {input}",
-      "commands8": "=> REDIRIGIDO A GITHUB <=",
-      "commands9": "=> DESCARGA OK <=",
-      "commands10": "=> MOSTRAR EXPERIENCIA <=",
-      "commands11": "=> MOSTRAR FORMACION <=",
-      "help1": " - 🚨 ayuda",
-      "help2": " - 💼 experiencia",
-      "help7": " - 📚 formacion",
-      "help3": " - 💻 proyectos",
-      "help4": " - 📄 descargar_cv",
-      "help5": " - 📩 contacto",
-      "help6": " - ❌ limpiar"
-    },
-    "card-detail": {
-      "back": "← Atrás",
-      "azertium": "Front end developer en un proyecto de gran evergadura en el sector turístico, referente en el team AM, resolviendo bugs de todo el proyecto e implementación de nuevos desarollos en base a figma con las tecnologias jspx, microservicios con vue2, vue3, nuxt3, javascript nativo. Actualmente como teach lead, mentorizando a perfiles junior del equipo, dando soporte y aportando soluciones de manera continua. Metodologia agile con Jira y control de versione Gitlab",
-      "t2client": "Diseño y desarrollo de la arquitectura del front-end de un proyecto del sector logística, implementación de componentes asociados al diseño de Figma a Storybook, desacoplando cualquier enlace que no lo haga intrínseco, instalación y configuración de librerías tanto de desarrollo como de estilos (tailwind). Ensamblar los componentes de Storybook al front-end, liderando la migración de vue2 a vue3 para mayor consistencia. Desarrollo de dataproviders y computación de datos JSON. Migración y documentación de todos los componentes a la nueva y última versión de Storybook automatizada con Chromatic y apoyo al equipo de Front-end.",
-      "coneptum": "Agencia Tecnológica de IA, Principalmente desarrollo de SPA con VUE (x2), control de estados con vuex, maquetación con la ayuda de Vuetify, scss, creación de componentes en base a Figma y conectar api rest con Graphql. Desarrollo de funcionalidades en otros proyectos con Angular. Metodologia agile con Trello, y control de versiones GITHUB.",
-      "casals-online": "Agencia de marketing online, empezando como junior en un equipo pequeño, asumiendo responsabilidades del propio departamento. Desarrollo de proyectos con CMS wordpress, prestashop, typo3, maquetación de landing pages, spa con Angular, Ionic 3. Resolución de incidencias con Jira service desk, Agile con Jira, trello.",
-      "pinturasfar": "Oficial de 1ª, pintor y decorador de interiores y exteriores, desde obra vista, pisos, casas, locales, grandes superficies, hoteles, hasta la restauración de un castillo, utilizando técnicas de color y espatulado.",
-      "campus": "Certificado de Programación avanzada con Javascript y ECMA6",
-      "isdi": "Bootcamp de desarrollo web full stack con javascript",
-      "stucom": "Formación de grado superior como técnico superior en diseño i desarrollo web (daw)",
-      "ub": "Prueba acceso mayores de 25 años a la universidad y/o formación de grado superior"
-    },
-    "contact-form": {
-      "email": "Email",
-      "placeholder1": "Introduce tu email",
-      "subject": "Asunto",
-      "message": "Mensaje",
-      "send": "Enviar",
-      "error1": "No se ha podido enviar el mensaje. Por favor, inténtalo de nuevo.",
-      "error2": "Se ha producido un error. Por favor, inténtelo de nuevo.",
-      "ok": "¡Mensaje enviado con éxito!"
-    },
-    "tooltip": {
-      "text": "Click en la terminal"
-    }
+  "terminal": {
+    "header": "Terminal de comandos",
+    "commands1": "¡Hola!👋 me llamo Carles",
+    "commands2": "Bienvenido a mi currículum interactivo",
+    "commands3": "Soy un apasionado del diseño y desarrollo web 👨🏻‍💻",
+    "commands4": "Mi especialidad es el Front end",
+    "commands5": "Terminal lista para recibir comandos. 🚀",
+    "commands6": "Escribe 'ayuda' y pulsa ENTER para ver los comandos disponibles",
+    "commands7": "Comando no reconocido: {input}",
+    "commands8": "=> REDIRIGIDO A GITHUB <=",
+    "commands9": "=> DESCARGA OK <=",
+    "commands10": "=> MOSTRAR EXPERIENCIA <=",
+    "commands11": "=> MOSTRAR FORMACION <=",
+    "help1": " - 🚨 ayuda",
+    "help2": " - 💼 experiencia",
+    "help7": " - 📚 formacion",
+    "help3": " - 💻 proyectos",
+    "help4": " - 📄 descargar_cv",
+    "help5": " - 📩 contacto",
+    "help6": " - ❌ limpiar"
+  },
+  "card-detail": {
+    "back": "← Atrás",
+    "bershka": "Front-end developer on a project in the textile sector (BERSHKA), currently working in several squads on maintenance and the development of new features, in the midst of migrating to Nuxt 3 and Pinia for the store.",
+    "azertium": "Front end developer en un proyecto de gran evergadura en el sector turístico (Radisson hotels), referente en el team AM, resolviendo bugs de todo el proyecto e implementación de nuevos desarollos en base a figma con las tecnologias jspx, microservicios con vue2, vue3, nuxt3, javascript nativo. Actualmente como teach lead, mentorizando a perfiles junior del equipo, dando soporte y aportando soluciones de manera continua. Metodologia agile con Jira y control de versione Gitlab",
+    "t2client": "Diseño y desarrollo de la arquitectura del front-end de un proyecto del sector logística (Danone), implementación de componentes asociados al diseño de Figma a Storybook, desacoplando cualquier enlace que no lo haga intrínseco, instalación y configuración de librerías tanto de desarrollo como de estilos (tailwind). Ensamblar los componentes de Storybook al front-end, liderando la migración de vue2 a vue3 para mayor consistencia. Desarrollo de dataproviders y computación de datos JSON. Migración y documentación de todos los componentes a la nueva y última versión de Storybook automatizada con Chromatic y apoyo al equipo de Front-end.",
+    "coneptum": "Agencia Tecnológica de IA, Principalmente desarrollo de SPA con VUE (x2), control de estados con vuex, maquetación con la ayuda de Vuetify, scss, creación de componentes en base a Figma y conectar api rest con Graphql. Desarrollo de funcionalidades en otros proyectos con Angular. Metodologia agile con Trello, y control de versiones GITHUB.",
+    "casals-online": "Agencia de marketing online, empezando como junior en un equipo pequeño, asumiendo responsabilidades del propio departamento. Desarrollo de proyectos con CMS wordpress, prestashop, typo3, maquetación de landing pages, spa con Angular, Ionic 3. Resolución de incidencias con Jira service desk, Agile con Jira, trello.",
+    "pinturasfar": "Oficial de 1ª, pintor y decorador de interiores y exteriores, desde obra vista, pisos, casas, locales, grandes superficies, hoteles, hasta la restauración de un castillo, utilizando técnicas de color y espatulado.",
+    "campus": "Certificado de Programación avanzada con Javascript y ECMA6",
+    "isdi": "Bootcamp de desarrollo web full stack con javascript",
+    "stucom": "Formación de grado superior como técnico superior en diseño i desarrollo web (daw)",
+    "ub": "Prueba acceso mayores de 25 años a la universidad y/o formación de grado superior"
+  },
+  "contact-form": {
+    "email": "Email",
+    "placeholder1": "Introduce tu email",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "send": "Enviar",
+    "error1": "No se ha podido enviar el mensaje. Por favor, inténtalo de nuevo.",
+    "error2": "Se ha producido un error. Por favor, inténtelo de nuevo.",
+    "ok": "¡Mensaje enviado con éxito!"
+  },
+  "tooltip": {
+    "text": "Click en la terminal"
   }
-  
-
-  
+}
